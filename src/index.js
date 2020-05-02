@@ -3,8 +3,9 @@ const http = require('http');
 const express = require('express');
 const socketio = require('socket.io');
 const Filter = require('bad-words');
-const { generateMessage, generateLocationMessage } = require('./utils/messages');
-const { addUser, removeUser, getUser, getUsersInRoom } = require('./utils/users');
+const { generateMessage, generateLocationMessage } = require('./services/messages');
+const { addUser, removeUser, getUser, getUsersInRoom } = require('./services/users');
+const { getRooms, addRoom } = require('./services/rooms');
 
 const app = express();
 const server = http.createServer(app);
@@ -19,15 +20,19 @@ io.on('connection', (socket) => {
     console.log('New WebSocket connection');
 
     socket.on('initJoin', (options, callback) => {
-        console.log('initJoin');
-        socket.emit('sendRooms', ["Some", "Other"]);
+        socket.emit('sendRooms', getRooms().map(room => room.name));
     });
 
     socket.on('join', (options, callback) => {
-        const { error, user } = addUser({ id: socket.id, ...options });
+        let { error, user } = addUser({ id: socket.id, ...options });
 
         if (error) {
             return callback(error)
+        }
+        let { error: roomError } = addRoom({ roomName: options.room });
+
+        if (roomError) {
+            return callback(roomError)
         }
 
         socket.join(user.room);
