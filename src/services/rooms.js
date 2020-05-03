@@ -19,19 +19,7 @@ const addRoom = ({ roomName }) => {
     // Validate the data
     if (!roomName) {
         return {
-            error: 'Username and room are required!'
-        }
-    }
-
-    // Check for existing room
-    const existingRoom = rooms.find((room) => {
-        return room.name === roomName;
-    });
-
-    // Validate username
-    if (existingRoom) {
-        return {
-            error: 'Room name is in use!'
+            error: 'Room name are required!'
         }
     }
 

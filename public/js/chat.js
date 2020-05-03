@@ -12,9 +12,6 @@ const messageTemplate = document.querySelector('#message-template').innerHTML;
 const locationMessageTemplate = document.querySelector('#location-message-template').innerHTML;
 const sidebarTemplate = document.querySelector('#sidebar-template').innerHTML;
 
-// Options
-const { username, room } = Qs.parse(location.search, { ignoreQueryPrefix: true });
-
 const autoscroll = () => {
     // New message element
     const $newMessage = $messages.lastElementChild;
@@ -106,9 +103,78 @@ $sendLocationButton.addEventListener('click', () => {
     })
 });
 
-socket.emit('join', { username, room }, (error) => {
-    if (error) {
-        alert(error);
-        location.href = '/'
+class Client {
+    constructor(socket, modal) {
+        this.socket = socket;
+        this.modal = modal;
+        this.username = null;
+        this.room = null;
     }
-});
+
+    init() {
+        const { username, room } = Qs.parse(location.search, { ignoreQueryPrefix: true });
+        if (!username) {
+            this.modal.showModal();
+            new JoinForm(this.socket, room, this.modal.closeModal);
+            return
+        }
+        this.username = username;
+        this.room = room ? room : 'Default';
+
+        this.join()
+    }
+
+    join() {
+        this.socket.emit('join', { username: this.username, room: this.room }, (error) => {
+            if (error) {
+                alert(error);
+                location.href = '/'
+            }
+        });
+    }
+
+    start() {
+        this.init();
+    }
+}
+
+class Modal {
+    constructor() {
+        this.modalElem = document.getElementById("modal");
+        this.closeButton = document.getElementsByClassName("close")[0];
+        this.closeButton.onclick = () => {
+            this.modalElem.style.display = "none";
+        };
+        this.closeModal = this.closeModal.bind(this);
+    }
+
+    showModal() {
+        this.modalElem.style.display = "block";
+    }
+
+    closeModal() {
+        this.modalElem.style.display = "none";
+    }
+}
+
+class JoinForm {
+    constructor(socket, room, onSubmit) {
+        this.inputField = document.getElementsByClassName("join-form__input")[0];
+        this.submitButton = document.getElementsByClassName("join-form__smbBtn")[0];
+        this.socket = socket;
+        this.submitButton.onclick = (e) => {
+            e.preventDefault();
+            this.socket.emit('join', { username: this.inputField.value, room: room }, (error) => {
+                if (error) {
+                    alert(error);
+                    location.href = '/'
+                }
+            });
+            onSubmit()
+        }
+    }
+}
+
+const modal = new Modal();
+const client = new Client(socket, modal);
+client.start();

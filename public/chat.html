@@ -4,7 +4,7 @@
 <head>
     <title>Chat App</title>
     <link rel="icon" href="/img/favicon.png">
-    <link rel="stylesheet" href="/css/styles.min.css">
+    <link rel="stylesheet" href="/css/styles.css">
 </head>
 
 <body>
@@ -23,6 +23,24 @@
             <button id="send-location">Send location</button>
         </div>
     </div>
+</div>
+
+<!-- Trigger/Open The Modal -->
+<button id="myBtn">Open Modal</button>
+
+<!-- The Modal -->
+<div id="modal" class="modal">
+
+    <!-- Modal content -->
+    <div class="modal-content">
+        <span class="close">&times;</span>
+        <h2 class="modal-content__title">Please, enter your name</h2>
+        <form class="join-form" action="/">
+            <input class="join-form__input" type="text" name="username" placeholder="Display name" required>
+            <button class="join-form__smbBtn">Join</button>
+        </form>
+    </div>
+
 </div>
 
 <script id="message-template" type="text/html">
