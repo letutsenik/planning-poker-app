@@ -3,23 +3,28 @@ const { v4: uuidv4 } = require('uuid');
 const rooms = [
     {
         id: 1111,
-        name: "Some",
-    },
-    {
-        id: 222,
-        name:  "Other"
+        name: 'Default',
     }
 ];
 
 const testSum = (a, b) => a + b;
 
 const addRoom = ({ roomName }) => {
-    roomName = roomName.trim().toLowerCase();
-
-    // Validate the data
     if (!roomName) {
         return {
-            error: 'Room name are required!'
+            room: rooms.find((room) => room.name === 'Default').name
+        }
+    }
+    roomName = roomName.trim();
+
+    // Check for existing room
+    const existingRoom = rooms.find((room) => {
+        return room.name === roomName
+    });
+
+    if (existingRoom) {
+        return {
+            room: existingRoom
         }
     }
 

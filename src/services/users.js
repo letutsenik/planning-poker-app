@@ -1,9 +1,14 @@
-const users = [];
+const users = [
+    {
+        id: 1111,
+        username: 'John',
+        room: 'Default'
+    }
+];
 
-const addUser = ({ id, username, room }) => {
+const addUser = ({ id, username = 'unknown', room }) => {
     // Clean the data
-    username = username.trim().toLowerCase();
-    room = room.trim().toLowerCase();
+    username = username.trim();
 
     // Validate the data
     if (!username || !room) {
@@ -25,7 +30,7 @@ const addUser = ({ id, username, room }) => {
     }
 
     // Store user
-    const user = { id, username, room };
+    const user = { id, username, room: room };
     users.push(user);
     return { user }
 };
@@ -43,7 +48,6 @@ const getUser = (id) => {
 };
 
 const getUsersInRoom = (room) => {
-    room = room.trim().toLowerCase();
     return users.filter((user) => user.room === room);
 };
 

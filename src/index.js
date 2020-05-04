@@ -24,15 +24,16 @@ io.on('connection', (socket) => {
     });
 
     socket.on('join', (options, callback) => {
-        let { error, user } = addUser({ id: socket.id, ...options });
-
-        if (error) {
-            return callback(error)
-        }
-        let { error: roomError } = addRoom({ roomName: options.room });
+        let { error: roomError, room } = addRoom({ roomName: options.room });
 
         if (roomError) {
             return callback(roomError)
+        }
+
+        let { error, user } = addUser({ id: socket.id, room, ...options });
+
+        if (error) {
+            return callback(error)
         }
 
         socket.join(user.room);
