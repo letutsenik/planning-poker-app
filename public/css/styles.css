@@ -145,23 +145,68 @@ button:disabled {
 
 .chat {
     display: flex;
+    justify-content: space-between;
+}
+
+.poker {
+    display: flex;
+    width: calc(50% - 125px);
+    height: 100vh;
+    padding: 20px;
+}
+
+.poker__column {
+    width: 50%;
+}
+
+.poker__points {
+    display: flex;
+    flex-wrap: wrap;
+}
+
+.poker_button {
+    display: inline-block;
+    margin: 10px 5px;
+    border-radius: 0.2em;
+    box-sizing: border-box;
+    font-family:'Roboto',sans-serif;
+    font-weight: 400;
+    color:#FFFFFF;
+    background-color:#3369ff;
+    box-shadow:inset 0 -0.6em 1em -0.35em rgba(0,0,0,0.17),inset 0 0.6em 2em -0.3em rgba(255,255,255,0.15),inset 0 0 0em 0.05em rgba(255,255,255,0.12);
+    text-align: center;
+    position: relative;
+}
+
+.poker_button:hover {
+    background-color:#3369ff;
+}
+
+.poker_button:active {
+    box-shadow:inset 0 0.6em 2em -0.3em rgba(0,0,0,0.15),inset 0 0 0em 0.05em rgba(255,255,255,0.12);
+}
+
+.poker_button.vote {
+    width: 50px;
+    height: 50px;
 }
 
 .chat__sidebar {
     height: 100vh;
     color: white;
     background: #333744;
-    width: 225px;
+    width: 250px;
     overflow-y: scroll
 }
 
 /* Chat styles */
 
 .chat__main {
-    flex-grow: 1;
+    width: calc(50% - 125px);
     display: flex;
     flex-direction: column;
     max-height: 100vh;
+    border-left: 1px solid #e9e9e9;
 }
 
 .chat__messages {

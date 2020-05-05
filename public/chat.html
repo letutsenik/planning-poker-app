@@ -12,6 +12,46 @@
     <div id="sidebar" class="chat__sidebar">
 
     </div>
+    <div class="poker">
+        <div class="poker__column">
+            <div class="poker__controls">
+                <button class="poker_button">Clear Votes</button>
+                <button class="poker_button">Show Votes</button>
+            </div>
+            <div id="voted-list" class="poker__voted-list">
+                <table>
+                    <tr>
+                        <th>Player</th>
+                        <th>Points</th>
+                    </tr>
+                    <tr>
+                        <td>Dima</td>
+                        <td>3</td>
+                    </tr>
+                    <tr>
+                        <td>Roma</td>
+                        <td>5</td>
+                    </tr>
+                    <tr>
+                        <td>Sam</td>
+                        <td>8</td>
+                    </tr>
+                </table>
+            </div>
+        </div>
+        <div class="poker__column">
+            <div class="poker__points">
+                <button class="poker_button vote">0.5</button>
+                <button class="poker_button vote">1</button>
+                <button class="poker_button vote">2</button>
+                <button class="poker_button vote">3</button>
+                <button class="poker_button vote">5</button>
+                <button class="poker_button vote">8</button>
+                <button class="poker_button vote">13</button>
+                <button class="poker_button vote">20</button>
+            </div>
+        </div>
+    </div>
     <div class="chat__main">
         <div id="messages" class="chat__messages"></div>
 
@@ -24,9 +64,6 @@
         </div>
     </div>
 </div>
-
-<!-- Trigger/Open The Modal -->
-<button id="myBtn">Open Modal</button>
 
 <!-- The Modal -->
 <div id="modal" class="modal">
