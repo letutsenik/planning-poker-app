@@ -6,6 +6,9 @@ const $messageFormInput = $messageForm.querySelector('input');
 const $messageFormButton = $messageForm.querySelector('button');
 const $sendLocationButton = document.querySelector('#send-location');
 const $messages = document.querySelector('#messages');
+const $voteButtons = document.querySelectorAll('.poker_button.vote');
+const $clearVotesButton = document.querySelector('.poker_button.clear');
+const $showVotesButton = document.querySelector('.poker_button.clear');
 
 // Templates
 const messageTemplate = document.querySelector('#message-template').innerHTML;
@@ -65,6 +68,17 @@ socket.on('roomData', ({ room, users }) => {
     document.querySelector('#sidebar').innerHTML = html
 });
 
+//voteListUpdate
+
+socket.on('voteListUpdate', (voteData) => {
+    console.log('voteListUpdate', voteData)
+    // const html = Mustache.render(sidebarTemplate, {
+    //     room,
+    //     users
+    // });
+    // document.querySelector('#sidebar').innerHTML = html
+});
+
 $messageForm.addEventListener('submit', (e) => {
     e.preventDefault();
 
@@ -100,6 +114,33 @@ $sendLocationButton.addEventListener('click', () => {
             $sendLocationButton.removeAttribute('disabled');
             console.log('Location shared!')
         })
+    })
+});
+
+$voteButtons.forEach((button) => {
+    button.addEventListener('click', (e) => {
+        const points = Number(e.target.innerHTML);
+        // console.log('Click Vote button', voteValue);
+
+        socket.emit('sendVote', points, (error) => {
+
+            if (error) {
+                return console.log(error)
+            }
+
+            console.log('Vote delivered!')
+        })
+    })
+});
+
+$clearVotesButton.addEventListener('click', () => {
+    socket.emit('clearVotes', null, (error) => {
+
+        if (error) {
+            return console.log(error)
+        }
+
+        console.log('Votes cleared!')
     })
 });
 

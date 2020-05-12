@@ -6,6 +6,7 @@ const Filter = require('bad-words');
 const { generateMessage, generateLocationMessage } = require('./services/messages');
 const { addUser, removeUser, getUser, getUsersInRoom } = require('./services/users');
 const { getRooms, addRoom } = require('./services/rooms');
+const { addVote, getVoteByRoom, clearVotesByRoom } = require('./services/votes');
 
 const app = express();
 const server = http.createServer(app);
@@ -65,6 +66,22 @@ io.on('connection', (socket) => {
     socket.on('sendLocation', (coords, callback) => {
         const user = getUser(socket.id);
         io.to(user.room).emit('locationMessage', generateLocationMessage(user.username, `https://google.com/maps?q=${coords.latitude},${coords.longitude}`));
+        callback()
+    });
+
+    socket.on('sendVote', (points, callback) => {
+        const user = getUser(socket.id);
+        const allVotes = addVote(user, points);
+
+        io.to(user.room).emit('voteListUpdate', allVotes[user.room]);
+        callback()
+    });
+
+    socket.on('clearVotes', (points, callback) => {
+        const user = getUser(socket.id);
+        clearVotesByRoom(user);
+
+        io.to(user.room).emit('voteListUpdate', []);
         callback()
     });
 
