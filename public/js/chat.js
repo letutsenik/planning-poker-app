@@ -8,7 +8,7 @@ const $sendLocationButton = document.querySelector('#send-location');
 const $messages = document.querySelector('#messages');
 const $voteButtons = document.querySelectorAll('.poker_button.vote');
 const $clearVotesButton = document.querySelector('.poker_button.clear');
-const $showVotesButton = document.querySelector('.poker_button.clear');
+const $showVotesButton = document.querySelector('.poker_button.show');
 
 // Templates
 const messageTemplate = document.querySelector('#message-template').innerHTML;
@@ -69,8 +69,8 @@ socket.on('roomData', ({ room, users }) => {
     document.querySelector('#sidebar').innerHTML = html
 });
 
-socket.on('voteListUpdate', (voteData) => {
-    const html = Mustache.render(votedListTemplate, { voteData });
+socket.on('voteListUpdate', ({ voteData, showVotes }) => {
+    const html = Mustache.render(votedListTemplate, { voteData, showVotes });
 
     document.querySelector('#voted-list').innerHTML = html
 });
@@ -139,6 +139,17 @@ $clearVotesButton.addEventListener('click', () => {
     })
 });
 
+$showVotesButton.addEventListener('click', () => {
+    socket.emit('showVotes', null, (error) => {
+
+        if (error) {
+            return console.log(error)
+        }
+
+        console.log('Votes is shown!')
+    })
+});
+
 class Client {
     constructor(socket, modal) {
         this.socket = socket;
@@ -161,7 +172,7 @@ class Client {
     }
 
     join() {
-        this.socket.emit('join', { username: this.username, room: this.room }, (error) => {
+        this.socket.emit('join', { username: this.username, roomName: this.room }, (error) => {  //TODO: Remove duplication
             if (error) {
                 alert(error);
                 location.href = '/'
@@ -200,7 +211,7 @@ class JoinForm {
         this.socket = socket;
         this.submitButton.onclick = (e) => {
             e.preventDefault();
-            this.socket.emit('join', { username: this.inputField.value, room: room }, (error) => {
+            this.socket.emit('join', { username: this.inputField.value, roomName: room }, (error) => { //TODO: Remove duplication
                 if (error) {
                     alert(error);
                     location.href = '/'

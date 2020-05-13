@@ -18,7 +18,7 @@
                 <button class="poker_button clear">Clear Votes</button>
                 <button class="poker_button show">Show Votes</button>
             </div>
-            <div id="voted-list" class="poker__voted-list">
+            <div id="voted-list" class="poker__user-list voted-list">
 
             </div>
         </div>
@@ -94,18 +94,23 @@
 </script>
 
 <script id="voted-list-template" type="text/html">
-    <table>
-        <tr>
-            <th>Player</th>
-            <th>Points</th>
-        </tr>
+    <div class="voted-list__table">
+        <div class="voted-list__row">
+            <div class="voted-list__cell voted-list__cell--bold">Player</div>
+            <div class="voted-list__cell voted-list__cell--bold">Points</div>
+        </div>
         {{#voteData}}
-        <tr>
-            <td>{{user}}</td>
-            <td>{{vote}}</td>
-        </tr>
+        <div class="voted-list__row">
+            <div class="voted-list__cell user">{{user}}</div>
+            {{#showVotes}}
+                <div class="voted-list__cell vote">{{vote}}</div>
+            {{/showVotes}}
+            {{^showVotes}}
+                <div class="voted-list__cell vote voted-list__cell--hidden">{{vote}}</div>
+            {{/showVotes}}
+        </div>
         {{/voteData}}
-        </table>
+        </div>
 </script>
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/mustache.js/3.0.1/mustache.min.js"></script>

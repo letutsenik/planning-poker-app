@@ -5,7 +5,7 @@ const socketio = require('socket.io');
 const Filter = require('bad-words');
 const { generateMessage, generateLocationMessage } = require('./services/messages');
 const { addUser, removeUser, getUser, getUsersInRoom } = require('./services/users');
-const { getRooms, addRoom } = require('./services/rooms');
+const { getRooms, addRoom, addUserToRoom, getRoomById } = require('./services/rooms');
 const { addVote, getVoteByRoom, clearVotesByRoom } = require('./services/votes');
 
 const app = express();
@@ -21,31 +21,31 @@ io.on('connection', (socket) => {
     console.log('New WebSocket connection');
 
     socket.on('initJoin', (options, callback) => {
-        socket.emit('sendRooms', getRooms().map(room => room.name));
+        socket.emit('sendRooms', getRooms());
     });
 
     socket.on('join', (options, callback) => {
-        let { error: roomError, room } = addRoom({ roomName: options.room });
-
+        let { error: roomError, room } = addRoom({ roomName: options.roomName });
         if (roomError) {
             return callback(roomError)
         }
 
-        let { error, user } = addUser({ id: socket.id, room, ...options });
+        let { error, user } = addUser({ id: socket.id, roomId: room.id, ...options });
 
         if (error) {
             return callback(error)
         }
+        const updatedRoom = addUserToRoom(room.id, user);
 
-        socket.join(user.room);
+        socket.join(user.roomId);
 
         socket.emit('message', generateMessage('Admin','Welcome!'));
-        socket.broadcast.to(user.room).emit('message', generateMessage('Admin', `${user.username} has joined!`));
-        io.to(user.room).emit('roomData', {
-            room: user.room,
-            users: getUsersInRoom(user.room)
+        socket.broadcast.to(user.roomId).emit('message', generateMessage('Admin', `${user.username} has joined!`));
+        io.to(user.roomId).emit('roomData', {
+            room: getRoomById(user.roomId).name,
+            users: getUsersInRoom(user.roomId)
         });
-        io.to(user.room).emit('voteListUpdate', getVoteByRoom(user));
+        io.to(user.roomId).emit('voteListUpdate', { voteData: getVoteByRoom(user), showVotes: false });
 
         callback()
     });
@@ -60,39 +60,49 @@ io.on('connection', (socket) => {
             return callback('Profanity is not allowed!')
         }
 
-        io.to(user.room).emit('message', generateMessage(user.username, message));
+        io.to(user.roomId).emit('message', generateMessage(user.username, message));
         callback()
     });
 
     socket.on('sendLocation', (coords, callback) => {
         const user = getUser(socket.id);
-        io.to(user.room).emit('locationMessage', generateLocationMessage(user.username, `https://google.com/maps?q=${coords.latitude},${coords.longitude}`));
+        io.to(user.roomId).emit('locationMessage', generateLocationMessage(user.username, `https://google.com/maps?q=${coords.latitude},${coords.longitude}`));
         callback()
     });
 
     socket.on('sendVote', (points, callback) => {
         const user = getUser(socket.id);
         addVote(user, points);
+        const voteData = getVoteByRoom(user);
+        const currentRoom = getRoomById(user.roomId);
+        const showVotes = voteData.length === currentRoom.users.length;
 
-        io.to(user.room).emit('voteListUpdate', getVoteByRoom(user));
+        io.to(user.roomId).emit('voteListUpdate', { voteData, showVotes });
         callback()
     });
 
     socket.on('clearVotes', (points, callback) => {
         const user = getUser(socket.id);
-        clearVotesByRoom(user);
+        clearVotesByRoom(user); //TODO use return
 
-        io.to(user.room).emit('voteListUpdate', []);
+        io.to(user.roomId).emit('voteListUpdate', []);
+        callback()
+    });
+
+    socket.on('showVotes', (points, callback) => {
+        const user = getUser(socket.id);
+
+        io.to(user.roomId).emit('voteListUpdate', { voteData: getVoteByRoom(user), showVotes: true });
         callback()
     });
 
     socket.on('disconnect', () => {
         const user = removeUser(socket.id);
         if (user) {
-            io.to(user.room).emit('message', generateMessage('Admin', `${user.username} has left!`));
-            io.to(user.room).emit('roomData', {
-                room: user.room,
-                users: getUsersInRoom(user.room)
+            io.to(user.roomId).emit('message', generateMessage('Admin', `${user.username} has left!`));
+            io.to(user.roomId).emit('roomData', {
+                room: getRoomById(user.roomId).name,
+                users: getUsersInRoom(user.roomId)
             })
         }
     })

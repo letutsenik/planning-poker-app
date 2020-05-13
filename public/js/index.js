@@ -13,7 +13,7 @@ socket.emit('initJoin', {}, (error) => {
 socket.on('sendRooms', (rooms) => {
     console.log('rooms =>', rooms);
     const html = Mustache.render(loginForm, {
-        rooms: rooms.map((room, index) => ({ val: room, txt: room })),
+        rooms: rooms.map((room, index) => ({ val: room.name, txt: room.name })),
     });
     document.querySelector('#login-form').innerHTML = html;
 

@@ -346,3 +346,30 @@ button:disabled {
 .join-form__smbBtn {
 
 }
+
+/* Voted list */
+.voted-list {}
+
+.voted-list__row {
+    display: flex;
+    margin-bottom: 5px;
+}
+
+.voted-list__cell {
+    width: 150px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.voted-list__cell.vote {
+    width: 100px;
+}
+
+.voted-list__cell--bold {
+    font-weight: bold;
+}
+
+.voted-list__cell--hidden {
+    background-color: lightgray;
+    color: lightgray;
+}
