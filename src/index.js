@@ -45,6 +45,7 @@ io.on('connection', (socket) => {
             room: user.room,
             users: getUsersInRoom(user.room)
         });
+        io.to(user.room).emit('voteListUpdate', getVoteByRoom(user));
 
         callback()
     });
@@ -71,9 +72,9 @@ io.on('connection', (socket) => {
 
     socket.on('sendVote', (points, callback) => {
         const user = getUser(socket.id);
-        const allVotes = addVote(user, points);
+        addVote(user, points);
 
-        io.to(user.room).emit('voteListUpdate', allVotes[user.room]);
+        io.to(user.room).emit('voteListUpdate', getVoteByRoom(user));
         callback()
     });
 

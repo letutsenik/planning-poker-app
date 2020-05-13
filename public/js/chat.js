@@ -14,6 +14,7 @@ const $showVotesButton = document.querySelector('.poker_button.clear');
 const messageTemplate = document.querySelector('#message-template').innerHTML;
 const locationMessageTemplate = document.querySelector('#location-message-template').innerHTML;
 const sidebarTemplate = document.querySelector('#sidebar-template').innerHTML;
+const votedListTemplate = document.querySelector('#voted-list-template').innerHTML;
 
 const autoscroll = () => {
     // New message element
@@ -68,15 +69,10 @@ socket.on('roomData', ({ room, users }) => {
     document.querySelector('#sidebar').innerHTML = html
 });
 
-//voteListUpdate
-
 socket.on('voteListUpdate', (voteData) => {
-    console.log('voteListUpdate', voteData)
-    // const html = Mustache.render(sidebarTemplate, {
-    //     room,
-    //     users
-    // });
-    // document.querySelector('#sidebar').innerHTML = html
+    const html = Mustache.render(votedListTemplate, { voteData });
+
+    document.querySelector('#voted-list').innerHTML = html
 });
 
 $messageForm.addEventListener('submit', (e) => {
@@ -120,7 +116,6 @@ $sendLocationButton.addEventListener('click', () => {
 $voteButtons.forEach((button) => {
     button.addEventListener('click', (e) => {
         const points = Number(e.target.innerHTML);
-        // console.log('Click Vote button', voteValue);
 
         socket.emit('sendVote', points, (error) => {
 
