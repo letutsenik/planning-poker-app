@@ -8,6 +8,8 @@ const { addUser, removeUser, getUser, getUsersInRoom } = require('./services/use
 const { getRooms, addRoom, addUserToRoom, removeUserFromRoom, getRoomById } = require('./services/rooms');
 const { addVote, getVoteByRoom, clearVotesByRoom } = require('./services/votes');
 
+const { statsCount } = require('./utils');
+
 const app = express();
 const server = http.createServer(app);
 const io = socketio(server);

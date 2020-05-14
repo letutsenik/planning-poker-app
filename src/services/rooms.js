@@ -7,9 +7,6 @@ const rooms = {
     },
 };
 
-
-const testSum = (a, b) => a + b;
-
 const addRoom = ({ roomName }) => {
     if (!roomName) {
         return {
@@ -77,6 +74,4 @@ module.exports = {
     addUserToRoom,
     removeUserFromRoom,
     getRoomById,
-
-    testSum
 };
