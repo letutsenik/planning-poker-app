@@ -55,6 +55,17 @@ const addUserToRoom = (roomId, user) => {
     return rooms[roomId];
 };
 
+const removeUserFromRoom = (roomId, userId) => {
+    const currentRoom = rooms[roomId];
+    const currentUsers = currentRoom.users;
+    const index = currentUsers.indexOf(userId);
+
+    if (index !== -1) {
+        currentUsers.splice(index, 1)
+    }
+    rooms[roomId] = { ...currentRoom, users: [ ...currentUsers]}
+};
+
 const getRoomById = (roomId) => {
     return rooms[roomId]
 };
@@ -64,6 +75,7 @@ module.exports = {
     getRooms,
     addRoom,
     addUserToRoom,
+    removeUserFromRoom,
     getRoomById,
 
     testSum

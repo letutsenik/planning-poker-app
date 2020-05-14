@@ -40,15 +40,17 @@ input {
 button {
     cursor: pointer;
     padding: 12px;
-    background: #7C5CBF;
+    background: #3369ff;
     border: none;
     color: white;
     font-size: 16px;
     transition: background .3s ease;
+    border-radius: 0.2em;
+    box-shadow:inset 0 -0.6em 1em -0.35em rgba(0,0,0,0.17),inset 0 0.6em 2em -0.3em rgba(255,255,255,0.15),inset 0 0 0em 0.05em rgba(255,255,255,0.12);
 }
 
 button:hover {
-    background: #6b47b8;
+    background: #3369ff;
 }
 
 button:disabled {
@@ -78,16 +80,17 @@ button:disabled {
     display: flex;
     justify-content: space-between;
     height: 50px;
+    margin-bottom: 10px;
 }
 
 .switcher .switcher__button {
     display: inline;
     width: 48%;
-    background: #7c5cbf94;
+    background: #92aefc;
 }
 
 .switcher__button.switcher__button--active {
-    background: #7C5CBF;
+    background: #3369ff;
 }
 
 .centered-form__box .hidden {
@@ -172,7 +175,7 @@ button:disabled {
     font-family:'Roboto',sans-serif;
     font-weight: 400;
     color:#FFFFFF;
-    background-color:#3369ff;
+    background-color: #3369ff;
     box-shadow:inset 0 -0.6em 1em -0.35em rgba(0,0,0,0.17),inset 0 0.6em 2em -0.3em rgba(255,255,255,0.15),inset 0 0 0em 0.05em rgba(255,255,255,0.12);
     text-align: center;
     position: relative;

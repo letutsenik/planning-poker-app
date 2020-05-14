@@ -5,7 +5,7 @@ const socketio = require('socket.io');
 const Filter = require('bad-words');
 const { generateMessage, generateLocationMessage } = require('./services/messages');
 const { addUser, removeUser, getUser, getUsersInRoom } = require('./services/users');
-const { getRooms, addRoom, addUserToRoom, getRoomById } = require('./services/rooms');
+const { getRooms, addRoom, addUserToRoom, removeUserFromRoom, getRoomById } = require('./services/rooms');
 const { addVote, getVoteByRoom, clearVotesByRoom } = require('./services/votes');
 
 const app = express();
@@ -98,6 +98,10 @@ io.on('connection', (socket) => {
 
     socket.on('disconnect', () => {
         const user = removeUser(socket.id);
+        if (user) {
+            removeUserFromRoom(user.roomId, user.id);
+        }
+
         if (user) {
             io.to(user.roomId).emit('message', generateMessage('Admin', `${user.username} has left!`));
             io.to(user.roomId).emit('roomData', {
