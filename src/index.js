@@ -78,8 +78,9 @@ io.on('connection', (socket) => {
         const voteData = getVoteByRoom(user);
         const currentRoom = getRoomById(user.roomId);
         const showVotes = voteData.length === currentRoom.users.length;
+        const stats = showVotes ? statsCount(voteData.map(item => item.vote)) : null;
 
-        io.to(user.roomId).emit('voteListUpdate', { voteData, showVotes });
+        io.to(user.roomId).emit('voteListUpdate', { voteData, showVotes, stats });
         callback()
     });
 

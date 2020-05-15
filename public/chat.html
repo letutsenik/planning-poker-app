@@ -110,7 +110,15 @@
             {{/showVotes}}
         </div>
         {{/voteData}}
+    </div>
+    {{#stats}}
+        <div>
+            <span>Max: {{max}}</span>
+            <span>Min: {{min}}</span>
+            <span>Median: {{median}}</span>
+            <span>Mean: {{mean}}</span>
         </div>
+    {{/stats}}
 </script>
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/mustache.js/3.0.1/mustache.min.js"></script>

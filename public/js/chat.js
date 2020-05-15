@@ -69,8 +69,8 @@ socket.on('roomData', ({ room, users }) => {
     document.querySelector('#sidebar').innerHTML = html
 });
 
-socket.on('voteListUpdate', ({ voteData, showVotes }) => {
-    const html = Mustache.render(votedListTemplate, { voteData, showVotes });
+socket.on('voteListUpdate', ({ voteData, showVotes, stats }) => {
+    const html = Mustache.render(votedListTemplate, { voteData, showVotes, stats, ...stats });
 
     document.querySelector('#voted-list').innerHTML = html
 });
