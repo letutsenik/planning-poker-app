@@ -95,7 +95,10 @@ io.on('connection', (socket) => {
     socket.on('showVotes', (points, callback) => {
         const user = getUser(socket.id);
 
-        io.to(user.roomId).emit('voteListUpdate', { voteData: getVoteByRoom(user), showVotes: true });
+        const voteData = getVoteByRoom(user);
+        const stats = statsCount(voteData.map(item => item.vote));
+
+        io.to(user.roomId).emit('voteListUpdate', { voteData: getVoteByRoom(user), showVotes: true, stats });
         callback()
     });
 
