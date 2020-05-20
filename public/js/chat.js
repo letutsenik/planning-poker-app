@@ -12,214 +12,235 @@ const $showVotesButton = document.querySelector('.poker_button.show');
 
 // Templates
 const messageTemplate = document.querySelector('#message-template').innerHTML;
-const locationMessageTemplate = document.querySelector('#location-message-template').innerHTML;
+const locationMessageTemplate = document.querySelector(
+	'#location-message-template',
+).innerHTML;
 const sidebarTemplate = document.querySelector('#sidebar-template').innerHTML;
-const votedListTemplate = document.querySelector('#voted-list-template').innerHTML;
+const votedListTemplate = document.querySelector('#voted-list-template')
+	.innerHTML;
 
 const autoscroll = () => {
-    // New message element
-    const $newMessage = $messages.lastElementChild;
+	// New message element
+	const $newMessage = $messages.lastElementChild;
 
-    // Height of the new message
-    const newMessageStyles = getComputedStyle($newMessage);
-    const newMessageMargin = parseInt(newMessageStyles.marginBottom);
-    const newMessageHeight = $newMessage.offsetHeight + newMessageMargin;
+	// Height of the new message
+	const newMessageStyles = getComputedStyle($newMessage);
+	const newMessageMargin = parseInt(newMessageStyles.marginBottom);
+	const newMessageHeight = $newMessage.offsetHeight + newMessageMargin;
 
-    // Visible height
-    const visibleHeight = $messages.offsetHeight;
+	// Visible height
+	const visibleHeight = $messages.offsetHeight;
 
-    // Height of messages container
-    const containerHeight = $messages.scrollHeight;
+	// Height of messages container
+	const containerHeight = $messages.scrollHeight;
 
-    // How far have I scrolled?
-    const scrollOffset = $messages.scrollTop + visibleHeight;
+	// How far have I scrolled?
+	const scrollOffset = $messages.scrollTop + visibleHeight;
 
-    if (containerHeight - newMessageHeight <= scrollOffset) {
-        $messages.scrollTop = $messages.scrollHeight
-    }
+	if (containerHeight - newMessageHeight <= scrollOffset) {
+		$messages.scrollTop = $messages.scrollHeight;
+	}
 };
 
-socket.on('message', (message) => {
-    console.log(message);
-    const html = Mustache.render(messageTemplate, {
-        username: message.username,
-        message: message.text,
-        createdAt: moment(message.createdAt).format('h:mm a')
-    });
-    $messages.insertAdjacentHTML('beforeend', html);
-    autoscroll()
+socket.on('message', message => {
+	console.log(message);
+	const html = Mustache.render(messageTemplate, {
+		username: message.username,
+		message: message.text,
+		createdAt: moment(message.createdAt).format('h:mm a'),
+	});
+	$messages.insertAdjacentHTML('beforeend', html);
+	autoscroll();
 });
 
-socket.on('locationMessage', (message) => {
-    console.log(message);
-    const html = Mustache.render(locationMessageTemplate, {
-        username: message.username,
-        url: message.url,
-        createdAt: moment(message.createdAt).format('h:mm a')
-    });
-    $messages.insertAdjacentHTML('beforeend', html);
-    autoscroll()
+socket.on('locationMessage', message => {
+	console.log(message);
+	const html = Mustache.render(locationMessageTemplate, {
+		username: message.username,
+		url: message.url,
+		createdAt: moment(message.createdAt).format('h:mm a'),
+	});
+	$messages.insertAdjacentHTML('beforeend', html);
+	autoscroll();
 });
 
-socket.on('roomData', ({ room, users }) => {
-    const html = Mustache.render(sidebarTemplate, {
-        room,
-        users
-    });
-    document.querySelector('#sidebar').innerHTML = html
+socket.on('roomData', ({room, users}) => {
+	const html = Mustache.render(sidebarTemplate, {
+		room,
+		users,
+	});
+	document.querySelector('#sidebar').innerHTML = html;
 });
 
-socket.on('voteListUpdate', ({ voteData, showVotes, stats }) => {
-    const html = Mustache.render(votedListTemplate, { voteData, showVotes, stats, ...stats });
+socket.on('voteListUpdate', ({voteData, showVotes, stats}) => {
+	const html = Mustache.render(votedListTemplate, {
+		voteData,
+		showVotes,
+		stats,
+		...stats,
+	});
 
-    document.querySelector('#voted-list').innerHTML = html
+	document.querySelector('#voted-list').innerHTML = html;
 });
 
-$messageForm.addEventListener('submit', (e) => {
-    e.preventDefault();
+$messageForm.addEventListener('submit', e => {
+	e.preventDefault();
 
-    $messageFormButton.setAttribute('disabled', 'disabled');
+	$messageFormButton.setAttribute('disabled', 'disabled');
 
-    const message = e.target.elements.message.value;
+	const message = e.target.elements.message.value;
 
-    socket.emit('sendMessage', message, (error) => {
-        $messageFormButton.removeAttribute('disabled');
-        $messageFormInput.value = '';
-        $messageFormInput.focus();
+	socket.emit('sendMessage', message, error => {
+		$messageFormButton.removeAttribute('disabled');
+		$messageFormInput.value = '';
+		$messageFormInput.focus();
 
-        if (error) {
-            return console.log(error)
-        }
+		if (error) {
+			return console.log(error);
+		}
 
-        console.log('Message delivered!')
-    })
+		console.log('Message delivered!');
+	});
 });
 
 $sendLocationButton.addEventListener('click', () => {
-    if (!navigator.geolocation) {
-        return alert('Geolocation is not supported by your browser.')
-    }
+	if (!navigator.geolocation) {
+		return alert('Geolocation is not supported by your browser.');
+	}
 
-    $sendLocationButton.setAttribute('disabled', 'disabled');
+	$sendLocationButton.setAttribute('disabled', 'disabled');
 
-    navigator.geolocation.getCurrentPosition((position) => {
-        socket.emit('sendLocation', {
-            latitude: position.coords.latitude,
-            longitude: position.coords.longitude
-        }, () => {
-            $sendLocationButton.removeAttribute('disabled');
-            console.log('Location shared!')
-        })
-    })
+	navigator.geolocation.getCurrentPosition(position => {
+		socket.emit(
+			'sendLocation',
+			{
+				latitude: position.coords.latitude,
+				longitude: position.coords.longitude,
+			},
+			() => {
+				$sendLocationButton.removeAttribute('disabled');
+				console.log('Location shared!');
+			},
+		);
+	});
 });
 
-$voteButtons.forEach((button) => {
-    button.addEventListener('click', (e) => {
-        const points = Number(e.target.innerHTML);
+$voteButtons.forEach(button => {
+	button.addEventListener('click', e => {
+		const points = Number(e.target.innerHTML);
 
-        socket.emit('sendVote', points, (error) => {
+		socket.emit('sendVote', points, error => {
+			if (error) {
+				return console.log(error);
+			}
 
-            if (error) {
-                return console.log(error)
-            }
-
-            console.log('Vote delivered!')
-        })
-    })
+			console.log('Vote delivered!');
+		});
+	});
 });
 
 $clearVotesButton.addEventListener('click', () => {
-    socket.emit('clearVotes', null, (error) => {
+	socket.emit('clearVotes', null, error => {
+		if (error) {
+			return console.log(error);
+		}
 
-        if (error) {
-            return console.log(error)
-        }
-
-        console.log('Votes cleared!')
-    })
+		console.log('Votes cleared!');
+	});
 });
 
 $showVotesButton.addEventListener('click', () => {
-    socket.emit('showVotes', null, (error) => {
+	socket.emit('showVotes', null, error => {
+		if (error) {
+			return console.log(error);
+		}
 
-        if (error) {
-            return console.log(error)
-        }
-
-        console.log('Votes is shown!')
-    })
+		console.log('Votes is shown!');
+	});
 });
 
 class Client {
-    constructor(socket, modal) {
-        this.socket = socket;
-        this.modal = modal;
-        this.username = null;
-        this.room = null;
-    }
+	constructor(socket, modal) {
+		this.socket = socket;
+		this.modal = modal;
+		this.username = null;
+		this.room = null;
+	}
 
-    init() {
-        const { username, room } = Qs.parse(location.search, { ignoreQueryPrefix: true });
-        if (!username) {
-            this.modal.showModal();
-            new JoinForm(this.socket, room, this.modal.closeModal);
-            return
-        }
-        this.username = username;
-        this.room = room ? room : 'Default';
+	init() {
+		const {username, room} = Qs.parse(location.search, {
+			ignoreQueryPrefix: true,
+		});
+		if (!username) {
+			this.modal.showModal();
+			new JoinForm(this.socket, room, this.modal.closeModal);
+			return;
+		}
+		this.username = username;
+		this.room = room ? room : 'Default';
 
-        this.join()
-    }
+		this.join();
+	}
 
-    join() {
-        this.socket.emit('join', { username: this.username, roomName: this.room }, (error) => {  //TODO: Remove duplication
-            if (error) {
-                alert(error);
-                location.href = '/'
-            }
-        });
-    }
+	join() {
+		this.socket.emit(
+			'join',
+			{username: this.username, roomName: this.room},
+			error => {
+				//TODO: Remove duplication
+				if (error) {
+					alert(error);
+					location.href = '/';
+				}
+			},
+		);
+	}
 
-    start() {
-        this.init();
-    }
+	start() {
+		this.init();
+	}
 }
 
 class Modal {
-    constructor() {
-        this.modalElem = document.getElementById("modal");
-        this.closeButton = document.getElementsByClassName("close")[0];
-        this.closeButton.onclick = () => {
-            this.modalElem.style.display = "none";
-        };
-        this.closeModal = this.closeModal.bind(this);
-    }
+	constructor() {
+		this.modalElem = document.getElementById('modal');
+		this.closeButton = document.getElementsByClassName('close')[0];
+		this.closeButton.onclick = () => {
+			this.modalElem.style.display = 'none';
+		};
+		this.closeModal = this.closeModal.bind(this);
+	}
 
-    showModal() {
-        this.modalElem.style.display = "block";
-    }
+	showModal() {
+		this.modalElem.style.display = 'block';
+	}
 
-    closeModal() {
-        this.modalElem.style.display = "none";
-    }
+	closeModal() {
+		this.modalElem.style.display = 'none';
+	}
 }
 
 class JoinForm {
-    constructor(socket, room, onSubmit) {
-        this.inputField = document.getElementsByClassName("join-form__input")[0];
-        this.submitButton = document.getElementsByClassName("join-form__smbBtn")[0];
-        this.socket = socket;
-        this.submitButton.onclick = (e) => {
-            e.preventDefault();
-            this.socket.emit('join', { username: this.inputField.value, roomName: room }, (error) => { //TODO: Remove duplication
-                if (error) {
-                    alert(error);
-                    location.href = '/'
-                }
-            });
-            onSubmit()
-        }
-    }
+	constructor(socket, room, onSubmit) {
+		this.inputField = document.getElementsByClassName('join-form__input')[0];
+		this.submitButton = document.getElementsByClassName('join-form__smbBtn')[0];
+		this.socket = socket;
+		this.submitButton.onclick = e => {
+			e.preventDefault();
+			this.socket.emit(
+				'join',
+				{username: this.inputField.value, roomName: room},
+				error => {
+					//TODO: Remove duplication
+					if (error) {
+						alert(error);
+						location.href = '/';
+					}
+				},
+			);
+			onSubmit();
+		};
+	}
 }
 
 const modal = new Modal();
