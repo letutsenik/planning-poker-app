@@ -21,7 +21,6 @@ const {
 	getRoomById,
 } = require('./services/rooms');
 const {addVote, getVoteByRoom, clearVotesByRoom} = require('./services/votes');
-
 const {statsCount} = require('./utils');
 
 const app = express();
@@ -36,7 +35,7 @@ app.use(express.static(publicDirectoryPath));
 io.on('connection', socket => {
 	console.log('New WebSocket connection');
 
-	socket.on('initJoin', (options, callback) => {
+	socket.on('initJoin', () => {
 		socket.emit('sendRooms', getRooms());
 	});
 
@@ -51,7 +50,7 @@ io.on('connection', socket => {
 		if (error) {
 			return callback(error);
 		}
-		const updatedRoom = addUserToRoom(room.id, user);
+		addUserToRoom(room.id, user); //TODO: use return
 
 		socket.join(user.roomId);
 
