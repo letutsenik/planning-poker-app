@@ -1,4 +1,4 @@
-const {v4: uuidv4} = require('uuid');
+const { v4: uuidv4 } = require('uuid');
 
 const rooms = {
 	Default: {
@@ -7,7 +7,7 @@ const rooms = {
 	},
 };
 
-const addRoom = ({roomName}) => {
+const addRoom = ({ roomName }) => {
 	if (!roomName) {
 		return {
 			room: rooms['Default'],
@@ -17,7 +17,7 @@ const addRoom = ({roomName}) => {
 
 	// Check for existing room
 	const existingRoom = Object.keys(rooms).reduce((res, key) => {
-		if (rooms[key].name === roomName) return {...rooms[key], id: key};
+		if (rooms[key].name === roomName) return { ...rooms[key], id: key };
 		return null;
 	}, null);
 
@@ -29,13 +29,13 @@ const addRoom = ({roomName}) => {
 
 	// Store room
 	const id = uuidv4();
-	const newRoom = {name: roomName, users: []};
+	const newRoom = { name: roomName, users: [] };
 	rooms[id] = newRoom;
-	return {room: {...newRoom, id}};
+	return { room: { ...newRoom, id } };
 };
 
 const getRooms = () => {
-	return Object.keys(rooms).map(key => ({...rooms[key], id: key}));
+	return Object.keys(rooms).map(key => ({ ...rooms[key], id: key }));
 };
 
 const addUserToRoom = (roomId, user) => {
@@ -48,7 +48,10 @@ const addUserToRoom = (roomId, user) => {
 		};
 	}
 
-	rooms[roomId] = {...rooms[roomId], users: [...rooms[roomId].users, user.id]};
+	rooms[roomId] = {
+		...rooms[roomId],
+		users: [...rooms[roomId].users, user.id],
+	};
 	return rooms[roomId];
 };
 
@@ -60,7 +63,7 @@ const removeUserFromRoom = (roomId, userId) => {
 	if (index !== -1) {
 		currentUsers.splice(index, 1);
 	}
-	rooms[roomId] = {...currentRoom, users: [...currentUsers]};
+	rooms[roomId] = { ...currentRoom, users: [...currentUsers] };
 };
 
 const getRoomById = roomId => {

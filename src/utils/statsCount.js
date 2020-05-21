@@ -1,6 +1,6 @@
 const statsCount = votes =>
 	votes.length === 0
-		? {min: 0, max: 0, median: 0, mean: 0}
+		? { min: 0, max: 0, median: 0, mean: 0 }
 		: {
 				min: Math.min(...votes),
 				max: Math.max(...votes),

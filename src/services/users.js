@@ -6,7 +6,7 @@ const users = [
 	},
 ];
 
-const addUser = ({id, username = 'unknown', roomId}) => {
+const addUser = ({ id, username = 'unknown', roomId }) => {
 	// Clean the data
 	username = username.trim();
 
@@ -30,9 +30,9 @@ const addUser = ({id, username = 'unknown', roomId}) => {
 	}
 
 	// Store user
-	const user = {id, username, roomId};
+	const user = { id, username, roomId };
 	users.push(user);
-	return {user};
+	return { user };
 };
 
 const removeUser = id => {

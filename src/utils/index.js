@@ -1,4 +1,4 @@
-const {statsCount} = require('./statsCount');
+const { statsCount } = require('./statsCount');
 
 module.exports = {
 	statsCount,
