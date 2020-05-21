@@ -21,20 +21,31 @@ const {
 } = require('./services/rooms');
 const {addVote, getVoteByRoom, clearVotesByRoom} = require('./services/votes');
 const {statsCount} = require('./utils');
+const {
+	CONNECTION,
+	INIT_JOIN,
+	JOIN,
+	SEND_MESSAGE,
+	SEND_LOCATION,
+	SEND_VOTE,
+	CLEAR_VOTE,
+	SHOW_VOTES,
+	DISCONNECT,
+} = require('./constants');
 
 const server = http.createServer(app);
 const io = socketio(server);
 
 const port = process.env.PORT || 5000;
 
-io.on('connection', socket => {
+io.on(CONNECTION, socket => {
 	console.log('New WebSocket connection');
 
-	socket.on('initJoin', () => {
+	socket.on(INIT_JOIN, () => {
 		socket.emit('sendRooms', getRooms());
 	});
 
-	socket.on('join', (options, callback) => {
+	socket.on(JOIN, (options, callback) => {
 		let {error: roomError, room} = addRoom({roomName: options.roomName});
 		if (roomError) {
 			return callback(roomError);
@@ -68,7 +79,7 @@ io.on('connection', socket => {
 		callback();
 	});
 
-	socket.on('sendMessage', (message, callback) => {
+	socket.on(SEND_MESSAGE, (message, callback) => {
 		console.log('socket', socket.id);
 		const user = getUser(socket.id);
 
@@ -82,7 +93,7 @@ io.on('connection', socket => {
 		callback();
 	});
 
-	socket.on('sendLocation', (coords, callback) => {
+	socket.on(SEND_LOCATION, (coords, callback) => {
 		const user = getUser(socket.id);
 		io.to(user.roomId).emit(
 			'locationMessage',
@@ -94,7 +105,7 @@ io.on('connection', socket => {
 		callback();
 	});
 
-	socket.on('sendVote', (points, callback) => {
+	socket.on(SEND_VOTE, (points, callback) => {
 		const user = getUser(socket.id);
 		addVote(user, points);
 		const voteData = getVoteByRoom(user);
@@ -108,7 +119,7 @@ io.on('connection', socket => {
 		callback();
 	});
 
-	socket.on('clearVotes', (points, callback) => {
+	socket.on(CLEAR_VOTE, (points, callback) => {
 		const user = getUser(socket.id);
 		clearVotesByRoom(user); //TODO use return
 
@@ -116,7 +127,7 @@ io.on('connection', socket => {
 		callback();
 	});
 
-	socket.on('showVotes', (points, callback) => {
+	socket.on(SHOW_VOTES, (points, callback) => {
 		const user = getUser(socket.id);
 
 		const voteData = getVoteByRoom(user);
@@ -130,7 +141,7 @@ io.on('connection', socket => {
 		callback();
 	});
 
-	socket.on('disconnect', () => {
+	socket.on(DISCONNECT, () => {
 		const user = removeUser(socket.id);
 		if (user) {
 			removeUserFromRoom(user.roomId, user.id);
