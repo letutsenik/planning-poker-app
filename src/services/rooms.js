@@ -35,7 +35,8 @@ const addRoom = ({ roomName }) => {
 };
 
 const getRooms = () => {
-	return Object.keys(rooms).map(key => ({ ...rooms[key], id: key }));
+	const allRooms = Object.keys(rooms).map(key => ({ ...rooms[key], id: key }));
+	return { rooms: allRooms };
 };
 
 const addUserToRoom = (roomId, user) => {
@@ -67,7 +68,7 @@ const removeUserFromRoom = (roomId, userId) => {
 };
 
 const getRoomById = roomId => {
-	return rooms[roomId];
+	return { room: rooms[roomId] };
 };
 
 module.exports = {

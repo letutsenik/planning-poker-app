@@ -17,7 +17,7 @@ const createDisconnectController = (io, socket) => {
 				generateMessage('Admin', `${user.username} has left!`),
 			);
 			io.to(user.roomId).emit('roomData', {
-				room: getRoomById(user.roomId).name,
+				room: getRoomById(user.roomId).room.name,
 				users: getUsersInRoom(user.roomId),
 			});
 		}

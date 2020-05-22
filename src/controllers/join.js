@@ -34,7 +34,7 @@ const createJoinController = (io, socket) => {
 				generateMessage('Admin', `${user.username} has joined!`),
 			);
 		io.to(user.roomId).emit('roomData', {
-			room: getRoomById(user.roomId).name,
+			room: getRoomById(user.roomId).room.name,
 			users: getUsersInRoom(user.roomId),
 		});
 		io.to(user.roomId).emit('voteListUpdate', {

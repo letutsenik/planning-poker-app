@@ -9,7 +9,7 @@ const createSendVoteController = (io, socket) => {
 		const user = getUser(socket.id);
 		addVote(user, points);
 		const voteData = getVoteByRoom(user);
-		const currentRoom = getRoomById(user.roomId);
+		const { room: currentRoom } = getRoomById(user.roomId);
 		const showVotes = voteData.length === currentRoom.users.length;
 		const stats = showVotes
 			? statsCount(voteData.map(item => item.vote))

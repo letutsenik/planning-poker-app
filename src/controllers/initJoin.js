@@ -1,8 +1,12 @@
 const { getRooms } = require('../services/rooms');
 
 const createInitJoinController = socket => {
-	return () => {
-		socket.emit('sendRooms', getRooms());
+	return (options, callback) => {
+		const { error, rooms } = getRooms();
+		if (error) {
+			return callback(error);
+		}
+		socket.emit('sendRooms', rooms);
 	};
 };
 
