@@ -9,9 +9,17 @@ const createUserService = Users => {
 			return { error };
 		}
 	};
+	const getUsers = async () => {
+		try {
+			const users = await Users.find();
+			return { users };
+		} catch (error) {
+			return { error };
+		}
+	};
 	const removeUser = async userId => {
 		try {
-			const user = await Users.findOneAndDelete(userId);
+			const user = await Users.findOneAndDelete({ _id: userId });
 			return { user };
 		} catch (error) {
 			return { error };
@@ -19,7 +27,17 @@ const createUserService = Users => {
 	};
 	const getUser = async userId => {
 		try {
-			const user = await Users.getById(userId);
+			const user = await Users.findById(userId);
+			return { user };
+		} catch (error) {
+			return { error };
+		}
+	};
+	const updateUser = async (userId, options) => {
+		try {
+			const user = await Users.findOneAndUpdate({ _id: userId }, options, {
+				new: true,
+			});
 			return { user };
 		} catch (error) {
 			return { error };
@@ -36,8 +54,10 @@ const createUserService = Users => {
 
 	return {
 		addUser,
+		getUsers,
 		removeUser,
 		getUser,
+		updateUser,
 		getUsersInRoom,
 	};
 };
