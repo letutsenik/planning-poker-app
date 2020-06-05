@@ -14,6 +14,14 @@ router.get('/users', async (req, res) => {
 	res.send(users);
 });
 
+router.get('/users/room/:id', async (req, res) => {
+	const { error, users } = await userService.getUsersInRoom(req.params.id);
+	if (error) {
+		return res.status(400).send(error);
+	}
+	res.send(users);
+});
+
 router.get('/users/:id', async (req, res) => {
 	const { error, user } = await userService.getUser(req.params.id);
 	if (error) {
