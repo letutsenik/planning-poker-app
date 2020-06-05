@@ -1,6 +1,6 @@
 const createRoomService = Rooms => {
-	const addRoom = async ({ roomName }) => {
-		const room = new Rooms(roomName.trim());
+	const addRoom = async ({ name }) => {
+		const room = new Rooms({ name: name.trim() });
 
 		try {
 			await room.save();
@@ -11,7 +11,7 @@ const createRoomService = Rooms => {
 	};
 	const getRooms = async () => {
 		try {
-			const rooms = await Rooms.getAll();
+			const rooms = await Rooms.find();
 			return { rooms };
 		} catch (error) {
 			return { error };

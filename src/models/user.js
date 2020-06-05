@@ -3,7 +3,7 @@ const Schema = mongoose.Schema;
 
 const userSchema = new Schema({
 	name: { type: String, default: 'unknown' },
-	roomId: { type: Number, default: 0 },
+	roomId: { type: String, default: '5ed9f5f976f1561d04f1caa9' },
 	vote: { type: Number, default: null },
 });
 

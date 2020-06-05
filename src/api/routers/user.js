@@ -54,7 +54,7 @@ router.delete('/users/:id', async (req, res) => {
 
 router.patch('/users/:id', async (req, res) => {
 	const updates = Object.keys(req.body);
-	const allowedUpdates = ['name', 'vote'];
+	const allowedUpdates = ['name', 'vote', 'roomId'];
 	const isValidOperation = updates.every(update =>
 		allowedUpdates.includes(update),
 	);
