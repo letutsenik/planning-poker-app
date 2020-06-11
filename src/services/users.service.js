@@ -52,6 +52,19 @@ const createUserService = Users => {
 		}
 	};
 
+	const getVoteByRoom = async roomId => {
+		try {
+			const users = await Users.find({ roomId });
+			const voteData = users.map(user => ({
+				user: user.name,
+				vote: user.vote,
+			}));
+			return { voteData };
+		} catch (error) {
+			return { error };
+		}
+	};
+
 	return {
 		addUser,
 		getUsers,
@@ -59,6 +72,7 @@ const createUserService = Users => {
 		getUser,
 		updateUser,
 		getUsersInRoom,
+		getVoteByRoom,
 	};
 };
 

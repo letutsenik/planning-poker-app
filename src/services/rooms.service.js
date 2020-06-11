@@ -20,23 +20,17 @@ const createRoomService = Rooms => {
 
 	const getRoomById = async roomId => {
 		try {
-			const room = await Rooms.getById(roomId);
+			const room = await Rooms.findById(roomId);
 			return { room };
 		} catch (error) {
 			return { error };
 		}
 	};
 
-	const addUserToRoom = () => {};
-	const removeUserFromRoom = () => {};
-
 	return {
 		addRoom,
 		getRooms,
 		getRoomById,
-
-		addUserToRoom,
-		removeUserFromRoom,
 	};
 };
 

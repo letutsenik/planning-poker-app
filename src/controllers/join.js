@@ -1,7 +1,8 @@
+const { generateMessage } = require('../services/messages');
+
 const { getVoteByRoom } = require('../services/votes');
 const { getUsersInRoom } = require('../services/users');
 const { getRoomById } = require('../services/rooms');
-const { generateMessage } = require('../services/messages');
 const { addUserToRoom } = require('../services/rooms');
 const { addUser } = require('../services/users');
 const { addRoom } = require('../services/rooms');
