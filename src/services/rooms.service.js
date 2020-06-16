@@ -1,5 +1,8 @@
 const createRoomService = Rooms => {
 	const addRoom = async ({ name }) => {
+		const roomsWithSameName = await Rooms.find({ name });
+		if (roomsWithSameName.length > 0) return { room: roomsWithSameName[0] };
+
 		const room = new Rooms({ name: name.trim() });
 
 		try {
