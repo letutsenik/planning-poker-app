@@ -27,6 +27,7 @@ const createJoinController = (io, socket) => {
 		}
 
 		let { error, user } = await userService.addUser({
+			socketId: socket.id,
 			roomId: room._id,
 			username: options.username,
 		});

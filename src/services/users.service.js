@@ -1,6 +1,6 @@
 const createUserService = Users => {
-	const addUser = async ({ username = 'unknown', roomId }) => {
-		const user = new Users({ name: username.trim(), roomId });
+	const addUser = async ({ username = 'unknown', roomId, socketId }) => {
+		const user = new Users({ name: username.trim(), roomId, socketId });
 
 		try {
 			await user.save();
@@ -9,9 +9,9 @@ const createUserService = Users => {
 			return { error };
 		}
 	};
-	const getUsers = async () => {
+	const getUsers = async options => {
 		try {
-			const users = await Users.find();
+			const users = await Users.find(options);
 			return { users };
 		} catch (error) {
 			return { error };
@@ -25,7 +25,7 @@ const createUserService = Users => {
 			return { error };
 		}
 	};
-	const getUser = async userId => {
+	const getUserById = async userId => {
 		try {
 			const user = await Users.findById(userId);
 			return { user };
@@ -69,7 +69,7 @@ const createUserService = Users => {
 		addUser,
 		getUsers,
 		removeUser,
-		getUser,
+		getUserById,
 		updateUser,
 		getUsersInRoom,
 		getVoteByRoom,
