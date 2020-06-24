@@ -17,9 +17,9 @@ const createUserService = Users => {
 			return { error };
 		}
 	};
-	const removeUser = async userId => {
+	const removeUser = async options => {
 		try {
-			const user = await Users.findOneAndDelete({ _id: userId });
+			const user = await Users.findOneAndDelete(options);
 			return { user };
 		} catch (error) {
 			return { error };
