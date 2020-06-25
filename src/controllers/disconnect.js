@@ -1,9 +1,13 @@
 const { User } = require('../models/user');
+const { Room } = require('../models/room');
+
 const { createUserService } = require('../services/users.service');
+const { createRoomService } = require('../services/rooms.service');
 
 const { generateMessage } = require('../services/messages');
 
 const userService = createUserService(User);
+const roomService = createRoomService(Room);
 
 const createDisconnectController = (io, socket) => {
 	return async (options, callback) => {
@@ -29,6 +33,21 @@ const createDisconnectController = (io, socket) => {
 			io.to(user.roomId).emit('roomData', {
 				users: usersInRoom,
 			});
+		}
+
+		const { getUsersInRoomError, users } = await userService.getUsersInRoom(
+			user.roomId,
+		);
+
+		if (getUsersInRoomError) {
+			return callback(getUsersInRoomError);
+		}
+
+		if (users.length === 0) {
+			const { error } = await roomService.removeRoom({ _id: user.roomId });
+			if (error) {
+				return callback(error);
+			}
 		}
 	};
 };

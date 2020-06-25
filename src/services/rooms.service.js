@@ -30,10 +30,20 @@ const createRoomService = Rooms => {
 		}
 	};
 
+	const removeRoom = async options => {
+		try {
+			const room = await Rooms.findOneAndDelete(options);
+			return { room };
+		} catch (error) {
+			return { error };
+		}
+	};
+
 	return {
 		addRoom,
 		getRooms,
 		getRoomById,
+		removeRoom,
 	};
 };
 
