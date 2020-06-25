@@ -33,6 +33,16 @@ const createUserService = Users => {
 			return { error };
 		}
 	};
+
+	const getUser = async options => {
+		try {
+			const user = await Users.findOne(options);
+			return { user };
+		} catch (error) {
+			return { error };
+		}
+	};
+
 	const updateUser = async (userId, options) => {
 		try {
 			const user = await Users.findOneAndUpdate({ _id: userId }, options, {
@@ -70,6 +80,7 @@ const createUserService = Users => {
 		getUsers,
 		removeUser,
 		getUserById,
+		getUser,
 		updateUser,
 		getUsersInRoom,
 		getVoteByRoom,

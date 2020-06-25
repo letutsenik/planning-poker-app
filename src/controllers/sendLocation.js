@@ -1,13 +1,21 @@
+const { User } = require('../models/user');
+const { createUserService } = require('../services/users.service');
+
+const userService = createUserService(User);
+
 const { generateLocationMessage } = require('../services/messages');
-const { getUser } = require('../services/users');
 
 const createSendLocationController = (io, socket) => {
-	return (coords, callback) => {
-		const user = getUser(socket.id);
+	return async (coords, callback) => {
+		const { error, user } = await userService.getUser({ socketId: socket.id });
+		if (error) {
+			return callback(error);
+		}
+
 		io.to(user.roomId).emit(
 			'locationMessage',
 			generateLocationMessage(
-				user.username,
+				user.name,
 				`https://google.com/maps?q=${coords.latitude},${coords.longitude}`,
 			),
 		);
@@ -18,3 +26,18 @@ const createSendLocationController = (io, socket) => {
 module.exports = {
 	createSendLocationController,
 };
+
+//Old:
+//const createSendLocationController = (io, socket) => {
+// 	return (coords, callback) => {
+// 		const user = getUser(socket.id);
+// 		io.to(user.roomId).emit(
+// 			'locationMessage',
+// 			generateLocationMessage(
+// 				user.name,
+// 				`https://google.com/maps?q=${coords.latitude},${coords.longitude}`,
+// 			),
+// 		);
+// 		callback();
+// 	};
+// };
