@@ -50,9 +50,14 @@ const createJoinController = (io, socket) => {
 			users: usersInRoom,
 		});
 
-		const votesByRoom = await userService.getVoteByRoom(user.roomId);
+		const { errorVoteData, voteData } = await userService.getVoteByRoom(
+			user.roomId,
+		);
+		if (errorVoteData) {
+			return callback(errorVoteData);
+		}
 		io.to(user.roomId).emit('voteListUpdate', {
-			voteData: votesByRoom,
+			voteData,
 			showVotes: false,
 		});
 

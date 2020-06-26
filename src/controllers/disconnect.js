@@ -16,19 +16,20 @@ const createDisconnectController = (io, socket) => {
 			socketId: socket.id,
 		});
 
+		if (!user) return;
+
 		if (error) {
 			return callback(error);
 		}
+		const { roomId } = user;
 
 		if (user) {
-			io.to(user.roomId).emit(
+			io.to(roomId).emit(
 				'message',
 				generateMessage('Admin', `${user.name} has left!`),
 			);
 
-			const { users: usersInRoom } = await userService.getUsersInRoom(
-				user.roomId,
-			); //TODO:  Handle Error
+			const { users: usersInRoom } = await userService.getUsersInRoom(roomId); //TODO:  Handle Error
 
 			io.to(user.roomId).emit('roomData', {
 				users: usersInRoom,
@@ -36,7 +37,7 @@ const createDisconnectController = (io, socket) => {
 		}
 
 		const { getUsersInRoomError, users } = await userService.getUsersInRoom(
-			user.roomId,
+			roomId,
 		);
 
 		if (getUsersInRoomError) {
@@ -44,7 +45,7 @@ const createDisconnectController = (io, socket) => {
 		}
 
 		if (users.length === 0) {
-			const { error } = await roomService.removeRoom({ _id: user.roomId });
+			const { error } = await roomService.removeRoom({ _id: roomId });
 			if (error) {
 				return callback(error);
 			}

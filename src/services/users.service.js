@@ -43,9 +43,9 @@ const createUserService = Users => {
 		}
 	};
 
-	const updateUser = async (userId, options) => {
+	const updateUser = async (searchOptions, options) => {
 		try {
-			const user = await Users.findOneAndUpdate({ _id: userId }, options, {
+			const user = await Users.findOneAndUpdate(searchOptions, options, {
 				new: true,
 			});
 			return { user };
@@ -65,10 +65,18 @@ const createUserService = Users => {
 	const getVoteByRoom = async roomId => {
 		try {
 			const users = await Users.find({ roomId });
-			const voteData = users.map(user => ({
-				user: user.name,
-				vote: user.vote,
-			}));
+			const voteData = users.reduce((data, user) => {
+				return user.vote
+					? [
+							...data,
+							{
+								user: user.name,
+								vote: user.vote,
+							},
+					  ]
+					: [...data];
+			}, []);
+
 			return { voteData };
 		} catch (error) {
 			return { error };

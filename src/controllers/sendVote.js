@@ -1,16 +1,35 @@
+const { User } = require('../models/user');
+const { createUserService } = require('../services/users.service');
+
+const userService = createUserService(User);
+
 const { statsCount } = require('../utils');
-const { getRoomById } = require('../services/rooms');
-const { getVoteByRoom } = require('../services/votes');
-const { addVote } = require('../services/votes');
-const { getUser } = require('../services/users');
 
 const createSendVoteController = (io, socket) => {
-	return (points, callback) => {
-		const user = getUser(socket.id);
-		addVote(user, points);
-		const voteData = getVoteByRoom(user);
-		const { room: currentRoom } = getRoomById(user.roomId);
-		const showVotes = voteData.length === currentRoom.users.length;
+	return async (points, callback) => {
+		const { error, user } = await userService.updateUser(
+			{ socketId: socket.id },
+			{ vote: points },
+		);
+		if (error) {
+			return callback(error);
+		}
+		const { errorVoteData, voteData } = await userService.getVoteByRoom(
+			user.roomId,
+		);
+		if (errorVoteData) {
+			return callback(errorVoteData);
+		}
+
+		const {
+			error: errorUsersInRoom,
+			users: usersInRoom,
+		} = await userService.getUsersInRoom(user.roomId);
+		if (errorUsersInRoom) {
+			return callback(errorVoteData);
+		}
+
+		const showVotes = voteData.length === usersInRoom.length;
 		const stats = showVotes
 			? statsCount(voteData.map(item => item.vote))
 			: null;
@@ -19,6 +38,22 @@ const createSendVoteController = (io, socket) => {
 		callback();
 	};
 };
+
+//const createSendVoteController = (io, socket) => {
+// 	return (points, callback) => {
+// 		const user = getUser(socket.id);
+// 		addVote(user, points);
+// 		const voteData = getVoteByRoom(user);
+// 		const { room: currentRoom } = getRoomById(user.roomId);
+// 		const showVotes = voteData.length === currentRoom.users.length;
+// 		const stats = showVotes
+// 			? statsCount(voteData.map(item => item.vote))
+// 			: null;
+//
+// 		io.to(user.roomId).emit('voteListUpdate', { voteData, showVotes, stats });
+// 		callback();
+// 	};
+// };
 
 module.exports = {
 	createSendVoteController,
