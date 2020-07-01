@@ -83,6 +83,15 @@ const createUserService = Users => {
 		}
 	};
 
+	const clearVotesByRoom = async roomId => {
+		try {
+			const res = await Users.updateMany({ roomId }, { vote: null });
+			return { res };
+		} catch (error) {
+			return { error };
+		}
+	};
+
 	return {
 		addUser,
 		getUsers,
@@ -92,6 +101,7 @@ const createUserService = Users => {
 		updateUser,
 		getUsersInRoom,
 		getVoteByRoom,
+		clearVotesByRoom,
 	};
 };
 
