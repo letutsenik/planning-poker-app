@@ -8,6 +8,7 @@ const { generateMessage } = require('../services/messages');
 const createSendMessageController = (io, socket) => {
 	return async (message, callback) => {
 		const { error, users } = await userService.getUsers({
+			// TODO: Use getUser
 			socketId: socket.id,
 		});
 		const user = users[0];
