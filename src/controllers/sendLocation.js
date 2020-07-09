@@ -26,18 +26,3 @@ const createSendLocationController = (io, socket) => {
 module.exports = {
 	createSendLocationController,
 };
-
-//Old:
-//const createSendLocationController = (io, socket) => {
-// 	return (coords, callback) => {
-// 		const user = getUser(socket.id);
-// 		io.to(user.roomId).emit(
-// 			'locationMessage',
-// 			generateLocationMessage(
-// 				user.name,
-// 				`https://google.com/maps?q=${coords.latitude},${coords.longitude}`,
-// 			),
-// 		);
-// 		callback();
-// 	};
-// };
