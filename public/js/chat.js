@@ -64,7 +64,7 @@ socket.on('locationMessage', message => {
 	autoscroll();
 });
 
-socket.on('roomData', ({room, users}) => {
+socket.on('roomData', ({ room, users }) => {
 	const html = Mustache.render(sidebarTemplate, {
 		room,
 		users,
@@ -72,7 +72,7 @@ socket.on('roomData', ({room, users}) => {
 	document.querySelector('#sidebar').innerHTML = html;
 });
 
-socket.on('voteListUpdate', ({voteData, showVotes, stats}) => {
+socket.on('voteListUpdate', ({ voteData, showVotes, stats }) => {
 	const html = Mustache.render(votedListTemplate, {
 		voteData,
 		showVotes,
@@ -168,7 +168,7 @@ class Client {
 	}
 
 	init() {
-		const {username, room} = Qs.parse(location.search, {
+		const { username, room } = Qs.parse(location.search, {
 			ignoreQueryPrefix: true,
 		});
 		if (!username) {
@@ -185,7 +185,7 @@ class Client {
 	join() {
 		this.socket.emit(
 			'join',
-			{username: this.username, roomName: this.room},
+			{ username: this.username, roomName: this.room },
 			error => {
 				//TODO: Remove duplication
 				if (error) {
@@ -229,7 +229,7 @@ class JoinForm {
 			e.preventDefault();
 			this.socket.emit(
 				'join',
-				{username: this.inputField.value, roomName: room},
+				{ username: this.inputField.value, roomName: room },
 				error => {
 					//TODO: Remove duplication
 					if (error) {
