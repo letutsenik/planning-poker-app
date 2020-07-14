@@ -3,7 +3,7 @@ const { createUserService } = require('../services/users.service');
 
 const userService = createUserService(User);
 
-const { generateLocationMessage } = require('../services/messages');
+const { generateLocationMessage } = require('../services/messages.service');
 
 const createSendLocationController = (io, socket) => {
 	return async (coords, callback) => {

@@ -4,7 +4,7 @@ const { Room } = require('../models/room');
 const { createUserService } = require('../services/users.service');
 const { createRoomService } = require('../services/rooms.service');
 
-const { generateMessage } = require('../services/messages');
+const { generateMessage } = require('../services/messages.service');
 
 const userService = createUserService(User);
 const roomService = createRoomService(Room);

@@ -3,7 +3,7 @@ const { createUserService } = require('../services/users.service');
 
 const { User } = require('../models/user');
 const userService = createUserService(User);
-const { generateMessage } = require('../services/messages');
+const { generateMessage } = require('../services/messages.service');
 
 const createSendMessageController = (io, socket) => {
 	return async (message, callback) => {

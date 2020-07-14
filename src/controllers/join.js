@@ -1,4 +1,4 @@
-const { generateMessage } = require('../services/messages');
+const { generateMessage } = require('../services/messages.service');
 const { Room } = require('../models/room');
 const { User } = require('../models/user');
 const { createRoomService } = require('../services/rooms.service');
