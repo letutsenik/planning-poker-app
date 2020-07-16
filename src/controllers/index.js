@@ -1,4 +1,4 @@
-const { createInitJoinController } = require('./initJoin');
+import { createInitJoinController } from './initJoin';
 const { createJoinController } = require('./join');
 const { createSendMessageController } = require('./sendMessage');
 const { createSendLocationController } = require('./sendLocation');

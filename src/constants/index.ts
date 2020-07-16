@@ -1,5 +1,1 @@
-import events from './events';
-
-module.exports = {
-	...events,
-};
+export * from './events';

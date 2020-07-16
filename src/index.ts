@@ -1,7 +1,7 @@
 import http from 'http';
 import socketio from 'socket.io';
 import app from './app';
-const {
+import {
 	CONNECTION,
 	INIT_JOIN,
 	JOIN,
@@ -11,7 +11,7 @@ const {
 	CLEAR_VOTE,
 	SHOW_VOTES,
 	DISCONNECT,
-} = require('./constants');
+} from './constants';
 const {
 	createInitJoinController,
 	createJoinController,
