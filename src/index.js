@@ -1,6 +1,6 @@
-const http = require('http');
-const socketio = require('socket.io');
-const app = require('./app');
+import http from 'http';
+import socketio from 'socket.io';
+import app from './app';
 const {
 	CONNECTION,
 	INIT_JOIN,

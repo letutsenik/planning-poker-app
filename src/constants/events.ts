@@ -8,7 +8,7 @@ const CLEAR_VOTE = 'clearVotes';
 const SHOW_VOTES = 'showVotes';
 const DISCONNECT = 'disconnect';
 
-module.exports = {
+export default {
 	CONNECTION,
 	INIT_JOIN,
 	JOIN,

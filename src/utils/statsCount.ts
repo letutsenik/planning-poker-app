@@ -1,4 +1,4 @@
-const statsCount = votes =>
+export const statsCount = (votes: Array<number>) =>
 	votes.length === 0
 		? { min: 0, max: 0, median: 0, mean: 0 }
 		: {
@@ -10,16 +10,11 @@ const statsCount = votes =>
 				),
 		  };
 
-const calcMedianValue = list => {
+export const calcMedianValue = (list: Array<number>) => {
 	const sortedList = [...list].sort((a, b) => a - b);
 	return sortedList.length % 2 !== 0
 		? sortedList[Math.floor(sortedList.length / 2)]
 		: (sortedList[sortedList.length / 2] +
 				sortedList[sortedList.length / 2 - 1]) /
 				2;
-};
-
-module.exports = {
-	statsCount,
-	calcMedianValue,
 };

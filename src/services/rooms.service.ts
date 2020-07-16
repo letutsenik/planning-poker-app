@@ -1,5 +1,8 @@
-const createRoomService = Rooms => {
-	const addRoom = async ({ name }) => {
+import { FilterQuery } from 'mongoose';
+import { Room, RoomModel } from '../models/room';
+
+export const createRoomService = (Rooms: RoomModel) => {
+	const addRoom = async ({ name }: { name: string }) => {
 		const roomsWithSameName = await Rooms.find({ name });
 		if (roomsWithSameName.length > 0) return { room: roomsWithSameName[0] };
 
@@ -21,7 +24,7 @@ const createRoomService = Rooms => {
 		}
 	};
 
-	const getRoomById = async roomId => {
+	const getRoomById = async (roomId: number) => {
 		try {
 			const room = await Rooms.findById(roomId);
 			return { room };
@@ -30,9 +33,9 @@ const createRoomService = Rooms => {
 		}
 	};
 
-	const removeRoom = async options => {
+	const removeRoom = async (conditions: FilterQuery<Room>) => {
 		try {
-			const room = await Rooms.findOneAndDelete(options);
+			const room = await Rooms.findOneAndDelete(conditions);
 			return { room };
 		} catch (error) {
 			return { error };
@@ -45,8 +48,4 @@ const createRoomService = Rooms => {
 		getRoomById,
 		removeRoom,
 	};
-};
-
-module.exports = {
-	createRoomService,
 };

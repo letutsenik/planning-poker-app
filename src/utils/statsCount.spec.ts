@@ -1,8 +1,8 @@
-const { statsCount, calcMedianValue } = require('./statsCount');
+import { statsCount, calcMedianValue } from './statsCount';
 
 describe('statsCount', () => {
 	test('empty votes', () => {
-		const votes = [];
+		const votes: Array<number> = [];
 		const result = { min: 0, max: 0, median: 0, mean: 0 };
 		expect(statsCount(votes)).toStrictEqual(result);
 	});

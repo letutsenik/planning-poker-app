@@ -3,3 +3,4 @@ node_modules/
 /tmp
 config/dev.env
 config/test.env
+/dist
