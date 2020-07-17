@@ -11,12 +11,18 @@ const userSchema = new Schema({
 	vote: { type: Number, default: null },
 });
 
-export interface User extends Document {
+export interface UserFields {
 	name?: string;
 	socketId: Identifier;
 	roomId: Identifier;
-	vote: number | null;
+	vote?: number | null;
 }
-export interface UserModel extends Model<User> {}
 
-export const User = mongoose.model<User, UserModel>('User', userSchema);
+export interface User extends Document {}
+
+export interface UserModel extends Model<User & UserFields> {}
+
+export const User = mongoose.model<User & UserFields, UserModel>(
+	'User',
+	userSchema,
+);

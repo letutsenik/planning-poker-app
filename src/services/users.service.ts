@@ -1,9 +1,13 @@
 import { FilterQuery, UpdateQuery } from 'mongoose';
-import { User, UserModel } from '../models/user';
+import { User, UserFields, UserModel } from '../models/user';
 import { Identifier } from '../types';
 
 export const createUserService = (Users: UserModel) => {
-	const addUser = async ({ name = 'unknown', roomId, socketId }: User) => {
+	const addUser = async ({
+		name = 'unknown',
+		roomId,
+		socketId,
+	}: UserFields) => {
 		const user = new Users({ name: name.trim(), roomId, socketId });
 
 		try {
@@ -60,7 +64,9 @@ export const createUserService = (Users: UserModel) => {
 			return { error };
 		}
 	};
-	const getUsersInRoom = async (roomId: Identifier) => {
+	const getUsersInRoom = async (
+		roomId: Identifier,
+	): Promise<{ error?: any; users?: Array<any> }> => {
 		try {
 			const users = await Users.find({ roomId });
 			return { users };
@@ -73,7 +79,10 @@ export const createUserService = (Users: UserModel) => {
 		try {
 			const users = await Users.find({ roomId });
 			const voteData = users.reduce(
-				(data: Array<{ user?: string; vote: number | null }>, user: User) => {
+				(
+					data: Array<{ user?: string; vote: number | null }>,
+					user: UserFields,
+				) => {
 					return user.vote
 						? [
 								...data,

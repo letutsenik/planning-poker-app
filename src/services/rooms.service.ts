@@ -2,7 +2,11 @@ import { FilterQuery } from 'mongoose';
 import { Room, RoomModel } from '../models/room';
 
 export const createRoomService = (Rooms: RoomModel) => {
-	const addRoom = async ({ name }: { name: string }) => {
+	const addRoom = async ({
+		name,
+	}: {
+		name: string;
+	}): Promise<{ error?: any; room?: Room }> => {
 		const roomsWithSameName = await Rooms.find({ name });
 		if (roomsWithSameName.length > 0) return { room: roomsWithSameName[0] };
 
@@ -15,6 +19,7 @@ export const createRoomService = (Rooms: RoomModel) => {
 			return { error };
 		}
 	};
+
 	const getRooms = async () => {
 		try {
 			const rooms = await Rooms.find();
