@@ -36,7 +36,7 @@ export const createSendMessageController = (io: Server, socket: Socket) => {
 
 		io.to(String(user.roomId)).emit(
 			'message',
-			generateMessage((user.name = 'unknown'), options.message),
+			generateMessage(user.name || 'unknown', options.message),
 		);
 		callback();
 	};
