@@ -131,7 +131,7 @@ $voteButtons.forEach(button => {
 	button.addEventListener('click', e => {
 		const points = Number(e.target.innerHTML);
 
-		socket.emit('sendVote', points, error => {
+		socket.emit('sendVote', { points }, error => {
 			if (error) {
 				return console.log(error);
 			}
