@@ -1,15 +1,15 @@
-const express = require('express');
-const router = new express.Router();
+import express, { Request, Response } from 'express';
+const router = express.Router();
 
-const { Room } = require('../../models/room');
-const { createRoomService } = require('../../services/rooms.service');
-const { User } = require('../../models/user');
-const { createUserService } = require('../../services/users.service');
+import { Room } from '../../models/room';
+import { createRoomService } from '../../services/rooms.service';
+import { User } from '../../models/user';
+import { createUserService } from '../../services/users.service';
 
 const roomService = createRoomService(Room);
 const userService = createUserService(User);
 
-router.get('/rooms', async (req, res) => {
+router.get('/rooms', async (req: Request, res: Response) => {
 	const { error, rooms } = await roomService.getRooms();
 	if (error) {
 		return res.status(400).send(error);
@@ -17,7 +17,7 @@ router.get('/rooms', async (req, res) => {
 	res.send(rooms);
 });
 
-router.get('/rooms/:id', async (req, res) => {
+router.get('/rooms/:id', async (req: Request, res: Response) => {
 	const { error, room } = await roomService.getRoomById(req.params.id);
 	if (error) {
 		return res.status(500).send(error);
@@ -30,7 +30,7 @@ router.get('/rooms/:id', async (req, res) => {
 	res.send(room);
 });
 
-router.post('/rooms', async (req, res) => {
+router.post('/rooms', async (req: Request, res: Response) => {
 	const { error, room } = await roomService.addRoom(req.body);
 	if (error) {
 		return res.status(400).send(error);
@@ -38,7 +38,7 @@ router.post('/rooms', async (req, res) => {
 	res.send(room);
 });
 
-router.get('/rooms/:id/user-votes', async (req, res) => {
+router.get('/rooms/:id/user-votes', async (req: Request, res: Response) => {
 	const { error, room } = await roomService.getRoomById(req.params.id);
 	if (error) {
 		return res.status(500).send(error);
@@ -58,4 +58,4 @@ router.get('/rooms/:id/user-votes', async (req, res) => {
 	res.send(voteData);
 });
 
-module.exports = router;
+export default router;

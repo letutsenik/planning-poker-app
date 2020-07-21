@@ -17,9 +17,10 @@ export const createUserService = (Users: UserModel) => {
 			return { error };
 		}
 	};
-	const getUsers = async (conditions: FilterQuery<User>) => {
+
+	const getUsers = async (conditions?: FilterQuery<User>) => {
 		try {
-			const users = await Users.find(conditions);
+			const users = await Users.find(conditions || {});
 			return { users };
 		} catch (error) {
 			return { error };

@@ -1,5 +1,6 @@
 import { FilterQuery } from 'mongoose';
 import { Room, RoomModel } from '../models/room';
+import { Identifier } from '../types';
 
 export const createRoomService = (Rooms: RoomModel) => {
 	const addRoom = async ({
@@ -29,7 +30,7 @@ export const createRoomService = (Rooms: RoomModel) => {
 		}
 	};
 
-	const getRoomById = async (roomId: number) => {
+	const getRoomById = async (roomId: Identifier) => {
 		try {
 			const room = await Rooms.findById(roomId);
 			return { room };

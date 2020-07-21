@@ -6,7 +6,6 @@ import { ControllerCallBackType } from '../types';
 
 const userService = createUserService(User);
 
-//coords
 interface SendLocationControllerOptions {
 	coords: {
 		latitude: number;
