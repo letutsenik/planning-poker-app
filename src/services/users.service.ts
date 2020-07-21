@@ -1,13 +1,48 @@
 import { FilterQuery, UpdateQuery } from 'mongoose';
 import { User, UserFields, UserModel } from '../models/user';
-import { Identifier } from '../types';
+import { Identifier, ServiceError } from '../types';
 
-export const createUserService = (Users: UserModel) => {
+type createUserServiceType = {
+	addUser: ({
+		name,
+		roomId,
+		socketId,
+	}: UserFields) => Promise<ServiceError & { user?: User }>;
+	getUsers: (
+		conditions?: FilterQuery<User>,
+	) => Promise<ServiceError & { users?: Array<User> }>;
+	removeUser: (
+		conditions: FilterQuery<User>,
+	) => Promise<ServiceError & { user?: User | null }>;
+	getUserById: (
+		userId: Identifier,
+	) => Promise<ServiceError & { user?: User | null }>;
+	getUser: (
+		conditions: FilterQuery<User>,
+	) => Promise<ServiceError & { user?: User | null }>;
+	updateUser: (
+		conditions: FilterQuery<User>,
+		update: UpdateQuery<User>,
+	) => Promise<ServiceError & { user?: User | null }>;
+	getUsersInRoom: (
+		roomId: Identifier,
+	) => Promise<ServiceError & { users?: Array<User> }>;
+	getVoteByRoom: (
+		roomId: Identifier,
+	) => Promise<
+		ServiceError & { voteData?: Array<{ user?: string; vote: number | null }> }
+	>;
+	clearVotesByRoom: (
+		roomId: Identifier,
+	) => Promise<ServiceError & { res?: { n: number; nModified: number } }>;
+};
+
+export const createUserService = (Users: UserModel): createUserServiceType => {
 	const addUser = async ({
 		name = 'unknown',
 		roomId,
 		socketId,
-	}: UserFields) => {
+	}: UserFields): Promise<ServiceError & { user?: User }> => {
 		const user = new Users({ name: name.trim(), roomId, socketId });
 
 		try {
@@ -18,7 +53,9 @@ export const createUserService = (Users: UserModel) => {
 		}
 	};
 
-	const getUsers = async (conditions?: FilterQuery<User>) => {
+	const getUsers = async (
+		conditions?: FilterQuery<User>,
+	): Promise<ServiceError & { users?: Array<User> }> => {
 		try {
 			const users = await Users.find(conditions || {});
 			return { users };
@@ -26,7 +63,9 @@ export const createUserService = (Users: UserModel) => {
 			return { error };
 		}
 	};
-	const removeUser = async (conditions: FilterQuery<User>) => {
+	const removeUser = async (
+		conditions: FilterQuery<User>,
+	): Promise<ServiceError & { user?: User | null }> => {
 		try {
 			const user = await Users.findOneAndDelete(conditions);
 			return { user };
@@ -34,7 +73,9 @@ export const createUserService = (Users: UserModel) => {
 			return { error };
 		}
 	};
-	const getUserById = async (userId: Identifier) => {
+	const getUserById = async (
+		userId: Identifier,
+	): Promise<ServiceError & { user?: User | null }> => {
 		try {
 			const user = await Users.findById(userId);
 			return { user };
@@ -43,7 +84,9 @@ export const createUserService = (Users: UserModel) => {
 		}
 	};
 
-	const getUser = async (conditions: FilterQuery<User>) => {
+	const getUser = async (
+		conditions: FilterQuery<User>,
+	): Promise<ServiceError & { user?: User | null }> => {
 		try {
 			const user = await Users.findOne(conditions);
 			return { user };
@@ -55,7 +98,7 @@ export const createUserService = (Users: UserModel) => {
 	const updateUser = async (
 		conditions: FilterQuery<User>,
 		update: UpdateQuery<User>,
-	) => {
+	): Promise<ServiceError & { user?: User | null }> => {
 		try {
 			const user = await Users.findOneAndUpdate(conditions, update, {
 				new: true,
@@ -67,7 +110,7 @@ export const createUserService = (Users: UserModel) => {
 	};
 	const getUsersInRoom = async (
 		roomId: Identifier,
-	): Promise<{ error?: any; users?: Array<any> }> => {
+	): Promise<ServiceError & { users?: Array<User> }> => {
 		try {
 			const users = await Users.find({ roomId });
 			return { users };
@@ -76,7 +119,11 @@ export const createUserService = (Users: UserModel) => {
 		}
 	};
 
-	const getVoteByRoom = async (roomId: Identifier) => {
+	const getVoteByRoom = async (
+		roomId: Identifier,
+	): Promise<
+		ServiceError & { voteData?: Array<{ user?: string; vote: number | null }> }
+	> => {
 		try {
 			const users = await Users.find({ roomId });
 			const voteData = users.reduce(
@@ -103,7 +150,9 @@ export const createUserService = (Users: UserModel) => {
 		}
 	};
 
-	const clearVotesByRoom = async (roomId: Identifier) => {
+	const clearVotesByRoom = async (
+		roomId: Identifier,
+	): Promise<ServiceError & { res?: { n: number; nModified: number } }> => {
 		try {
 			const res = await Users.updateMany({ roomId }, { vote: null });
 			return { res };

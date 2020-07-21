@@ -17,7 +17,7 @@ export const createSendLocationController = (io: Server, socket: Socket) => {
 	return async (
 		options: SendLocationControllerOptions,
 		callback: ControllerCallBackType,
-	) => {
+	): Promise<void> => {
 		const { error, user } = await userService.getUser({ socketId: socket.id });
 		if (error) {
 			return callback(error);

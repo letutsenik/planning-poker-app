@@ -19,7 +19,7 @@ export const createJoinController = (io: Server, socket: Socket) => {
 	return async (
 		options: JoinControllerOptions,
 		callback: ControllerCallBackType,
-	) => {
+	): Promise<void> => {
 		const { error: roomError, room } = await roomService.addRoom({
 			name: options.roomName,
 		});

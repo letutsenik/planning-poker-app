@@ -17,7 +17,7 @@ export const createSendMessageController = (io: Server, socket: Socket) => {
 	return async (
 		options: SendMessageControllerOptions,
 		callback: ControllerCallBackType,
-	) => {
+	): Promise<void> => {
 		const { error, users = [] } = await userService.getUsers({
 			// TODO: Use getUser
 			socketId: socket.id,

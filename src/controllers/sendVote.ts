@@ -15,7 +15,7 @@ export const createSendVoteController = (io: Server, socket: Socket) => {
 	return async (
 		options: SendVoteControllerOptions,
 		callback: ControllerCallBackType,
-	) => {
+	): Promise<void> => {
 		const { error, user } = await userService.updateUser(
 			{ socketId: socket.id },
 			{ vote: options.points },

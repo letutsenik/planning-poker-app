@@ -10,7 +10,7 @@ export const createClearVoteController = (io: Server, socket: Socket) => {
 	return async (
 		options: SendVoteControllerOptions,
 		callback: ControllerCallBackType,
-	) => {
+	): Promise<void> => {
 		const { error, user } = await userService.getUser({ socketId: socket.id });
 		if (error) {
 			return callback(error);

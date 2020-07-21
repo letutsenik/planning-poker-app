@@ -16,7 +16,7 @@ export const createDisconnectController = (io: Server, socket: Socket) => {
 	return async (
 		options: { [key: string]: string },
 		callback: ControllerCallBackType,
-	) => {
+	): Promise<void> => {
 		console.log('===disconnect===');
 		const { error, user } = await userService.removeUser({
 			socketId: socket.id,

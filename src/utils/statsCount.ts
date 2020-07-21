@@ -1,4 +1,11 @@
-export const statsCount = (votes: Array<number>) =>
+type StatsCountType = {
+	min: number;
+	max: number;
+	median: number;
+	mean: number;
+};
+
+export const statsCount = (votes: Array<number>): StatsCountType =>
 	votes.length === 0
 		? { min: 0, max: 0, median: 0, mean: 0 }
 		: {
@@ -10,7 +17,7 @@ export const statsCount = (votes: Array<number>) =>
 				),
 		  };
 
-export const calcMedianValue = (list: Array<number>) => {
+export const calcMedianValue = (list: Array<number>): number => {
 	const sortedList = [...list].sort((a, b) => a - b);
 	return sortedList.length % 2 !== 0
 		? sortedList[Math.floor(sortedList.length / 2)]

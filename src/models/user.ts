@@ -18,11 +18,8 @@ export interface UserFields {
 	vote?: number | null;
 }
 
-export type User = Document;
+export type User = Document & UserFields;
 
-export type UserModel = Model<User & UserFields>;
+export type UserModel = Model<User>;
 
-export const User = mongoose.model<User & UserFields, UserModel>(
-	'User',
-	userSchema,
-);
+export const User = mongoose.model<User, UserModel>('User', userSchema);

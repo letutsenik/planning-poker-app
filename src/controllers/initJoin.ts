@@ -10,7 +10,7 @@ export const createInitJoinController = (socket: Socket) => {
 	return async (
 		options: { [key: string]: string },
 		callback: ControllerCallBackType,
-	) => {
+	): Promise<void> => {
 		const { error, rooms } = await roomService.getRooms();
 		if (error) {
 			return callback(error);
