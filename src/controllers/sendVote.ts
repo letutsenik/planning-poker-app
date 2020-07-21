@@ -8,7 +8,7 @@ import { ControllerCallBackType } from '../types';
 
 const userService = createUserService(User);
 
-interface SendVoteControllerOptions {
+export interface SendVoteControllerOptions {
 	points: number;
 }
 export const createSendVoteController = (io: Server, socket: Socket) => {
