@@ -10,6 +10,6 @@ const roomSchema = new Schema({
 export interface Room extends Document {
 	name?: string;
 }
-export interface RoomModel extends Model<Room> {}
+export type RoomModel = Model<Room>;
 
 export const Room = mongoose.model<Room, RoomModel>('Room', roomSchema);

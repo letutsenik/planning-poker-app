@@ -18,9 +18,9 @@ export interface UserFields {
 	vote?: number | null;
 }
 
-export interface User extends Document {}
+export type User = Document;
 
-export interface UserModel extends Model<User & UserFields> {}
+export type UserModel = Model<User & UserFields>;
 
 export const User = mongoose.model<User & UserFields, UserModel>(
 	'User',

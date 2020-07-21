@@ -12,7 +12,7 @@ import {
 	SHOW_VOTES,
 	DISCONNECT,
 } from './constants';
-const {
+import {
 	createInitJoinController,
 	createJoinController,
 	createSendMessageController,
@@ -21,7 +21,7 @@ const {
 	createClearVoteController,
 	createShowVotesController,
 	createDisconnectController,
-} = require('./controllers');
+} from './controllers';
 
 const server = http.createServer(app);
 const io = socketio(server);

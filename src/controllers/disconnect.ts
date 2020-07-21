@@ -12,11 +12,9 @@ import { generateMessage } from '../services/messages.service';
 const userService = createUserService(User);
 const roomService = createRoomService(Room);
 
-interface DisconnectControllerOptions {}
-
 export const createDisconnectController = (io: Server, socket: Socket) => {
 	return async (
-		options: DisconnectControllerOptions,
+		options: { [key: string]: string },
 		callback: ControllerCallBackType,
 	) => {
 		console.log('===disconnect===');

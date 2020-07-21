@@ -15,19 +15,19 @@ interface JoinControllerOptions {
 	username: string;
 }
 
-const createJoinController = (io: Server, socket: Socket) => {
+export const createJoinController = (io: Server, socket: Socket) => {
 	return async (
 		options: JoinControllerOptions,
 		callback: ControllerCallBackType,
 	) => {
-		let { error: roomError, room } = await roomService.addRoom({
+		const { error: roomError, room } = await roomService.addRoom({
 			name: options.roomName,
 		});
 		if (roomError) {
 			return callback(roomError);
 		}
 
-		let { error: getUsersError, users } = await userService.getUsersInRoom(
+		const { error: getUsersError, users } = await userService.getUsersInRoom(
 			room?._id,
 		);
 		if (getUsersError) {
@@ -37,7 +37,7 @@ const createJoinController = (io: Server, socket: Socket) => {
 			return callback('Username is in use!');
 		}
 
-		let { error, user } = await userService.addUser({
+		const { error, user } = await userService.addUser({
 			socketId: socket.id,
 			roomId: room?._id,
 			name: options.username,

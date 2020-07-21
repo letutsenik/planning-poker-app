@@ -6,11 +6,9 @@ import { createRoomService } from '../services/rooms.service';
 
 const roomService = createRoomService(Room);
 
-interface InitJoinControllerOptions {}
-
 export const createInitJoinController = (socket: Socket) => {
 	return async (
-		options: InitJoinControllerOptions,
+		options: { [key: string]: string },
 		callback: ControllerCallBackType,
 	) => {
 		const { error, rooms } = await roomService.getRooms();
