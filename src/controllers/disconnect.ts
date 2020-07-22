@@ -32,7 +32,7 @@ export const createDisconnectController = (io: Server, socket: Socket) => {
 		if (user) {
 			io.to(String(roomId)).emit(
 				'message',
-				generateMessage('Admin', `${user.name} has left!`),
+				generateMessage('Admin', `${user.name || ''} has left!`),
 			);
 
 			const { users: usersInRoom } = await userService.getUsersInRoom(roomId); //TODO:  Handle Error

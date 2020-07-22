@@ -5,11 +5,15 @@
     "sourceType": "module",
     "ecmaFeatures": {
       "jsx": true
-    }
+    },
+    "ellowJs": true,
+    "project": "./tsconfig.json"
   },
   "plugins": ["@typescript-eslint"],
   "extends": [
-    "plugin:@typescript-eslint/recommended"
+    "eslint:recommended",
+    "plugin:@typescript-eslint/recommended",
+    "plugin:@typescript-eslint/recommended-requiring-type-checking"
   ],
   "rules": {
     "strict": ["error", "never"],

@@ -49,7 +49,7 @@ export const createUserService = (Users: UserModel): createUserServiceType => {
 			await user.save();
 			return { user };
 		} catch (error) {
-			return { error };
+			return { error: { message: 'Something went wrong' } };
 		}
 	};
 
@@ -60,7 +60,7 @@ export const createUserService = (Users: UserModel): createUserServiceType => {
 			const users = await Users.find(conditions || {});
 			return { users };
 		} catch (error) {
-			return { error };
+			return { error: { message: 'Something went wrong' } };
 		}
 	};
 	const removeUser = async (
@@ -70,7 +70,7 @@ export const createUserService = (Users: UserModel): createUserServiceType => {
 			const user = await Users.findOneAndDelete(conditions);
 			return { user };
 		} catch (error) {
-			return { error };
+			return { error: { message: 'Something went wrong' } };
 		}
 	};
 	const getUserById = async (
@@ -80,7 +80,7 @@ export const createUserService = (Users: UserModel): createUserServiceType => {
 			const user = await Users.findById(userId);
 			return { user };
 		} catch (error) {
-			return { error };
+			return { error: { message: 'Something went wrong' } };
 		}
 	};
 
@@ -91,7 +91,7 @@ export const createUserService = (Users: UserModel): createUserServiceType => {
 			const user = await Users.findOne(conditions);
 			return { user };
 		} catch (error) {
-			return { error };
+			return { error: { message: 'Something went wrong' } };
 		}
 	};
 
@@ -105,7 +105,7 @@ export const createUserService = (Users: UserModel): createUserServiceType => {
 			});
 			return { user };
 		} catch (error) {
-			return { error };
+			return { error: { message: 'Something went wrong' } };
 		}
 	};
 	const getUsersInRoom = async (
@@ -115,7 +115,7 @@ export const createUserService = (Users: UserModel): createUserServiceType => {
 			const users = await Users.find({ roomId });
 			return { users };
 		} catch (error) {
-			return { error };
+			return { error: { message: 'Something went wrong' } };
 		}
 	};
 
@@ -146,7 +146,7 @@ export const createUserService = (Users: UserModel): createUserServiceType => {
 
 			return { voteData };
 		} catch (error) {
-			return { error };
+			return { error: { message: 'Something went wrong' } };
 		}
 	};
 
@@ -154,10 +154,12 @@ export const createUserService = (Users: UserModel): createUserServiceType => {
 		roomId: Identifier,
 	): Promise<ServiceError & { res?: { n: number; nModified: number } }> => {
 		try {
-			const res = await Users.updateMany({ roomId }, { vote: null });
+			// eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
+			const res = await Users.updateMany({ roomId }, { vote: null }); // TODO
+			// eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
 			return { res };
 		} catch (error) {
-			return { error };
+			return { error: { message: 'Something went wrong' } };
 		}
 	};
 

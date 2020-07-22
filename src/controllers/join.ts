@@ -39,7 +39,7 @@ export const createJoinController = (io: Server, socket: Socket) => {
 
 		const { error, user } = await userService.addUser({
 			socketId: socket.id,
-			roomId: room?._id,
+			roomId: String(room?._id) || '5ed9f5f976f1561d04f1caa9',
 			name: options.username,
 		});
 
@@ -52,7 +52,10 @@ export const createJoinController = (io: Server, socket: Socket) => {
 		socket.emit('message', generateMessage('Admin', 'Welcome!'));
 		socket.broadcast
 			.to(String(user?.roomId))
-			.emit('message', generateMessage('Admin', `${user?.name} has joined!`));
+			.emit(
+				'message',
+				generateMessage('Admin', `${user?.name || ''} has joined!`),
+			);
 		const { users: usersInRoom } = await userService.getUsersInRoom(
 			String(user?.roomId),
 		); //TODO:  Handle Error

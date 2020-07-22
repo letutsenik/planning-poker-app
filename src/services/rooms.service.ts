@@ -28,7 +28,7 @@ export const createRoomService = (Rooms: RoomModel): createRoomServiceType => {
 			await room.save();
 			return { room };
 		} catch (error) {
-			return { error };
+			return { error: { message: 'Something went wrong' } };
 		}
 	};
 
@@ -40,7 +40,7 @@ export const createRoomService = (Rooms: RoomModel): createRoomServiceType => {
 			const rooms = await Rooms.find();
 			return { rooms };
 		} catch (error) {
-			return { error };
+			return { error: { message: 'Something went wrong' } };
 		}
 	};
 
@@ -51,7 +51,7 @@ export const createRoomService = (Rooms: RoomModel): createRoomServiceType => {
 			const room = await Rooms.findById(roomId);
 			return { room };
 		} catch (error) {
-			return { error };
+			return { error: { message: 'Something went wrong' } };
 		}
 	};
 
@@ -62,7 +62,7 @@ export const createRoomService = (Rooms: RoomModel): createRoomServiceType => {
 			const room = await Rooms.findOneAndDelete(conditions);
 			return { room };
 		} catch (error) {
-			return { error };
+			return { error: { message: 'Something went wrong' } };
 		}
 	};
 
