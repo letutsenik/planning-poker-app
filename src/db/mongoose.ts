@@ -1,8 +1,8 @@
 import mongoose from 'mongoose';
 import chalk from 'chalk';
 
-// eslint-disable-next-line @typescript-eslint/no-non-null-assertion
 mongoose
+	// eslint-disable-next-line @typescript-eslint/no-non-null-assertion
 	.connect(process.env.MONGODB_URL!, {
 		useNewUrlParser: true,
 		useCreateIndex: true,
