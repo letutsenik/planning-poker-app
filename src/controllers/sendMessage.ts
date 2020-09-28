@@ -28,7 +28,6 @@ export const createSendMessageController = (io: Server, socket: Socket) => {
 			return callback(error);
 		}
 
-		// eslint-disable-next-line @typescript-eslint/no-unsafe-call,@typescript-eslint/no-unsafe-assignment
 		const filter = new Filter(); //TODO
 
 		// eslint-disable-next-line @typescript-eslint/no-unsafe-call,@typescript-eslint/no-unsafe-member-access
